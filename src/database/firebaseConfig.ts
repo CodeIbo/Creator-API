@@ -17,9 +17,9 @@ admin.initializeApp({
 
 const db = admin.firestore();
 const usersRef = db.collection('Posts');
-const blogPosts: post[] = []
+export const blogPosts: post[] = []
 
-export const getPosts = async (res: Response<any, Record<string, any>, number>) => {
+export const getPosts = async (res: Response<any, Record<string, any>, number>,id?: string) => {
     usersRef.get()
         .then((snapshot: FirebaseFirestore.QuerySnapshot) => {
             snapshot.docs.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
@@ -28,24 +28,26 @@ export const getPosts = async (res: Response<any, Record<string, any>, number>) 
                 if (!foundId) {
                     blogPosts.push(post)
                 }
-            });
-            res.send(blogPosts);
-        })
+            }); 
+        }).then(() =>{
+            return id ? res.send(blogPosts[parseInt(id,10)- 1]): res.send(blogPosts)})
         .catch(error => {
             res.status(500).send({ error });
         });
 }
 
-export const addPost = async (newPost: post) => {
-    const docRef = await usersRef.add({
-        id: uuidv4(),
+export const addPost = async (newPost: post,res: Response<any, Record<string, any>, number>) => {
+    let centralaizedID =  uuidv4()
+    const post = {
+        id:  centralaizedID,
         title: newPost.title,
         subtitle: newPost.subtitle,
         date: newPost.date,
         content: newPost.content,
-        src_photo: newPost.src_photo,
         tags: newPost.tags,
         comments: newPost.comments
-    });
-    return docRef.id;
-}
+    }
+    const docRef = await usersRef.doc(centralaizedID).set(post).then(() => res.send('Sended'))
+    return blogPosts.push(post)
+} 
+

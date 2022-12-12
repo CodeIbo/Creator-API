@@ -25,20 +25,19 @@ app.get('/posts', (req,res)=>{
     
 })
 
-app.get('/post/:id',(req,res)=>{
-    let index = Number(req.params.id) -1
-    res.send(getPosts(res)[index])
+app.get('/post/:id',async (req,res)=>{
+    getPosts(res,req.params.id)
 })
 
 
-app.post('add/post',(req,res) =>{
+app.post('/add/post', async (req,res) =>{
+    addPost(req.body,res)
+})
+
+app.post('/edit/post/:id',(req,res) =>{
     
 })
 
-app.post('edit/post/:id',(req,res) =>{
-    
-})
-
-app.delete('delete/post/:id',(req,res) =>{
+app.delete('/delete/post/:id',(req,res) =>{
 
 })
