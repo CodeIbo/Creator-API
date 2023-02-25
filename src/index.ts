@@ -1,8 +1,8 @@
 import express from 'express'
 import './database/firebaseConfig';
 import cors from 'cors';
-import { addPost, deletePost, editPost, getPosts } from './database/firebaseConfig';
-
+import { addPost, deletePost, editPost, getPosts, registerUser, generateToken } from './database/firebaseConfig';
+import dotenv from 'dotenv';
 
 
 
@@ -11,9 +11,10 @@ const app = express();
 
 app.use(express.json())
 app.use(cors())
+dotenv.config();
 
-app.listen(8888, () => {
-    console.log("Aplikacja wystartowała na porcie 8888");
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`Aplikacja wystartowała na porcie ${process.env.PORT}`);
 })
 
 app.get('/', (req, res) => {
@@ -40,4 +41,12 @@ app.post('/edit/post/:id', (req, res) => {
 
 app.delete('/delete/post/:id', (req, res) => {
     deletePost(req.params.id,res);
+})
+
+app.post('/register', (req,res) =>{
+    registerUser(res,req.body)
+})
+
+app.post('/generate-token', (req,res) =>{
+    generateToken(res,req.body.uid)
 })
