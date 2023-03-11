@@ -1,3 +1,9 @@
+interface comment {
+  id: string;
+  userName: string;
+  comment: string;
+}
+
 export default interface post {
   id: string;
   title: string;
@@ -7,5 +13,5 @@ export default interface post {
   content: string;
   src_photo?: string;
   tags: string[];
-  comments?: string[];
+  comments?: comment[];
 }

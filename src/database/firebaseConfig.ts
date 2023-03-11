@@ -34,7 +34,13 @@ export const getPosts = async (res: Response<any, Record<string, any>, number>, 
                 }
             });
         }).then(() => {
-            return id ? res.send(blogPosts.find(el => el.id === id)) : res.send(blogPosts)
+            if(id){
+                const post = blogPosts.find(el => el.id === id)
+
+                return post ? res.send(post).status(200): (res.status(500).send("CANT FIND POST"))
+            }else{
+                return blogPosts ? res.send(blogPosts).status(200) :  res.send("Cant find Blog Posts").send(404)
+            }
         })
         .catch(error => {
             res.status(500).send({ error });
@@ -67,11 +73,9 @@ export const editPost = async (editPost: post, id: string, res: Response<any, Re
         .then((snapshot: FirebaseFirestore.QuerySnapshot) => {
             snapshot.docs.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
                 let snapshotPost = doc.data() as post
+                console.log(id)
                 if (snapshotPost.id === id) {
                     post = editPost as post
-                }
-                else {
-                    res.status(500).send('Action impossible')
                 }
             });
         }).then(() => {
