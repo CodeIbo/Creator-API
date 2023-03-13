@@ -1,8 +1,10 @@
 import express from 'express'
 import './database/firebaseConfig';
 import cors from 'cors';
-import { addPost, deletePost, editPost, getPosts, registerUser, generateToken } from './database/firebaseConfig';
+import { addPost,deletePost,editPost,getPosts } from './database/Posts/Posts';
+import { registerUser,generateToken } from './database/Auth/auth';
 import dotenv from 'dotenv';
+import { getConfigFromPanel, postConfigToDB } from './database/Config/config';
 
 
 
@@ -20,6 +22,15 @@ app.listen(process.env.PORT || 3000, () => {
 app.get('/', (req, res) => {
     res.send("Server Work")
 })
+
+// spotify
+
+app.get('/spotify/login', (req,res) => {
+
+})
+
+
+//firebase
 
 app.get('/posts', (req, res) => {
     getPosts(res)
@@ -49,4 +60,13 @@ app.post('/register', (req,res) =>{
 
 app.post('/generate-token', (req,res) =>{
     generateToken(res,req.body.uid)
+})
+
+//config 
+
+app.get('/config/third-parties', (req,res) =>{
+    getConfigFromPanel(res,req)
+})
+app.post('/config/set-third-parties', (req,res)=>{
+    postConfigToDB(res,req.headers['name-config'] as string,req.body)
 })
