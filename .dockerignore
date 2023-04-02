@@ -1,0 +1,8 @@
+#Docker 
+
+docker-compose.yml
+Dockerfile
+
+#folders & files
+node_modules
+netlify.toml

@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  blog_api:
+    image: blog:base
+    tty: true
+    stdin_open: true
+    working_dir: /home/blog/BlogApi
+    container_name: blog_api
+    env_file:
+      - .env
+    ports:
+      - "${PORT_API}:${PORT_API}" 
+    volumes:
+      - /home/blog_project/BlogApi:/home/blog/BlogApi
+  blog_panel:
+    image: blog:base
+    tty: true
+    stdin_open: true
+    working_dir: /home/blog/BlogPanel
+    container_name: blog_panel   
+    env_file:
+      - .env
+    ports:
+      - "${PORT_PANEL}:${PORT_PANEL}" 
+    volumes:
+      - /home/blog_project/BlogPanel:/home/blog/BlogPanel
+  blog_frontend:
+    image: blog:base
+    tty: true
+    stdin_open: true
+    working_dir: /home/blog/BlogFrontEnd
+    container_name: blog_frontend
+    env_file:
+      - .env
+    ports:
+      - "${PORT_FRONT}:${PORT_FRONT}" 
+    volumes:
+      - /home/blog_project/BlogFrontEnd:/home/blog/BlogFrontEnd
+

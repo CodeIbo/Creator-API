@@ -20,8 +20,8 @@ dotenv.config();
 //     saveUninitialized: true
 // }));
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Aplikacja wystartowała na porcie ${process.env.PORT}`);
+app.listen(process.env.PORT_API || 6666, () => {
+    console.log(`Aplikacja wystartowała na porcie ${process.env.PORT_API}`);
     
 })
 
