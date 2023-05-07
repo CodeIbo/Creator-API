@@ -12,6 +12,7 @@ export const configModelThirdParty = {
         clientId: '',
         clientSecret:'',
         redirectUri:'',
+        episodeId: ''
     },
 }
 
@@ -33,7 +34,7 @@ export const getConfigData = async(model:configModel,cryptr:Cryptr): Promise<{da
                 for (const key in data) {
                     if (configThirdPartyValues[id].hasOwnProperty(key)) {
                         update(configThirdPartyValues[id], [key], () => {
-                            return cryptr.decrypt(data[key]);
+                            return data[key].length > 0 ? cryptr.decrypt(data[key]): data[key]
                         });
                     }
                 }

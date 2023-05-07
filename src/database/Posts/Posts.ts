@@ -48,7 +48,7 @@ export const addPost = async (newPost: post, res: Response<any, Record<string, a
         tags: newPost.tags,
         comments: newPost.comments
     }
-    await usersRef.doc(centralaizedID).set(post).then(() => res.status(200).send('Sended')).catch(error => {
+    usersRef.doc(centralaizedID).set(post).then(() => res.status(200).send('Sended')).catch(error => {
         res.status(500).send({ error });
     });
 
@@ -60,7 +60,6 @@ export const editPost = async (editPost: post, id: string, res: Response<any, Re
         .then((snapshot: FirebaseFirestore.QuerySnapshot) => {
             snapshot.docs.forEach((doc: FirebaseFirestore.QueryDocumentSnapshot) => {
                 let snapshotPost = doc.data() as post
-                console.log(id)
                 if (snapshotPost.id === id) {
                     post = editPost as post
                 }

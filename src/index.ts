@@ -5,7 +5,7 @@ import { addPost,deletePost,editPost,getPosts } from './database/Posts/Posts';
 import { registerUser,generateToken } from './database/Auth/auth';
 import dotenv from 'dotenv';
 import { getConfigFromPanel, postConfigToDB } from './database/Config/config';
-import {  getPodcastData, spotifyApi, spotifyAuth } from './database/Spotify/spotify-config';
+import {  updateDataFromApiSpotify, spotifyApi, spotifyAuth, editSpotifyEpisode, getSpotifyEpisodes } from './database/Spotify/spotify-config';
 
 
 
@@ -21,7 +21,7 @@ dotenv.config();
 // }));
 
 app.listen(process.env.PORT_API || 6666, () => {
-    console.log(`Aplikacja wystartowała na porcie ${process.env.PORT_API}`);
+    console.log(`Aplikacja wystartowała na porcie ${process.env.PORT_API ? process.env.PORT_API : '6666' }`);
     
 })
 
@@ -45,12 +45,24 @@ app.get('/spotify/login',(req:any,res) => {
     spotifyAuth(error,code,state,res);
 })
 
-app.get('/spotify/podcast/:id',(req,res) =>{
-    let id = req.params.id
-    getPodcastData(id,res)
+app.get('/spotify/podcast/episodes',(req,res) =>{
+    getSpotifyEpisodes(res)
 })
 
-//firebase
+app.get('/spotify/podcast/episodes/:id',(req,res) =>{
+    getSpotifyEpisodes(res,req.params.id)
+})
+
+app.post('/spotify/podcast/refresh/:id',(req,res) =>{
+    let id = req.params.id
+    updateDataFromApiSpotify(id,res)
+})
+
+app.post('/spotify/podcast/edit/:id', (req, res) => {
+    editSpotifyEpisode(req.body,req.params.id,res)
+})
+
+//blog
 
 app.get('/posts', (req, res) => {
     getPosts(res)
@@ -73,6 +85,8 @@ app.post('/edit/post/:id', (req, res) => {
 app.delete('/delete/post/:id', (req, res) => {
     deletePost(req.params.id,res);
 })
+
+//guards
 
 app.post('/register', (req,res) =>{
     registerUser(res,req.body)
