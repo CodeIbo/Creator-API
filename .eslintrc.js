@@ -15,6 +15,7 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
     project: "tsconfig.json",
+    tsconfigRootDir: __dirname,
   },
   settings: {
     "import/parser": {
@@ -35,5 +36,6 @@ module.exports = {
     "no-console": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
+    "import/no-unresolved": "off",
   },
 };

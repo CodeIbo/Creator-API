@@ -21,7 +21,7 @@
         "@middleware/*": ["src/middleware/*"]
       },
       "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
     },
     "exclude": ["node_modules","dist","coverage","panel"],
     "include": ["src",".eslintrc.js","db"],
