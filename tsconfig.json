@@ -1,11 +1,28 @@
 {
-  "compilerOptions": {
-    "target": "es2015",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "rootDir": "./",
-    "baseUrl": "./",
-    "esModuleInterop": true,
-    "resolveJsonModule": true
+    "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "allowJs": true,
+      "strict": true,
+      "outDir": "dist",
+      "rootDir": ".",
+      "baseUrl": ".",
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "moduleResolution": "node",
+      "paths": {
+        "@db/*": ["src/db/*"],
+        "@config/*": ["src/config/*"],
+        "@controllers/*": ["src/controllers/*"],
+        "@routes/*": ["src/routes/*"],
+        "@src/*":["src/*"],
+        "@models/*": ["src/models/*"],
+        "@guards/*": ["src/guards/*"],
+        "@middleware/*": ["src/middleware/*"]
+      },
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "exclude": ["node_modules","dist","coverage","panel"],
+    "include": ["src",".eslintrc.js","db"],
   }
-}
