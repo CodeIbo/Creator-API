@@ -71,22 +71,21 @@ CREATE TABLE IF NOT EXISTS coredb.blogs (
 CREATE TABLE IF NOT EXISTS coredb.articles (
   id CHAR(36) NOT NULL DEFAULT (UUID()),
   blog_key VARCHAR(36) NOT NULL,
+  url VARCHAR(255) NOT NULL,
   author VARCHAR(255) NULL,
   article_content TEXT NULL,
   photo_url VARCHAR(255) NULL,
   date DATE NULL,
-  PRIMARY KEY (Id),
-  UNIQUE INDEX blog_key_UNIQUE (blog_key ASC) VISIBLE,
-  UNIQUE INDEX Id_UNIQUE (Id ASC) VISIBLE,
-  UNIQUE INDEX photo_url_UNIQUE (photo_url ASC) VISIBLE,
+  meta_title VARCHAR(255) NULL,
+  meta_description VARCHAR(255) NULL,
+  keywords VARCHAR(255) NULL,
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE INDEX Id_UNIQUE (id ASC) VISIBLE,
+  UNIQUE INDEX url_UNIQUE (url ASC) VISIBLE,
   CONSTRAINT article_key
     FOREIGN KEY (blog_key)
     REFERENCES blogs (blog_key)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT url_key
-    FOREIGN KEY (Id)
-    REFERENCES urls (ID)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 

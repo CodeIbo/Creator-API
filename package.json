@@ -6,7 +6,7 @@
   "scripts": {
     "start:prod": "npm run build && node dist/src/index.js",
     "start:dev": "nodemon --legacy-watch",
-    "db:seed": "ts-node -r tsconfig-paths/register db/seed.ts",
+    "db:seed": "ts-node -r tsconfig-paths/register src/db/seeders/seed_all.ts",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage"

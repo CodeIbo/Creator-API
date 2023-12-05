@@ -3,8 +3,8 @@ import Articles from "./Articles.model";
 
 interface BlogAttributes {
   id: string;
-  page_content: string;
-  page_type: string;
+  blog_title: string;
+  blog_key: string;
 }
 
 type BlogCreationAttributes = BlogAttributes;
@@ -25,11 +25,10 @@ class Blogs extends Model<BlogAttributes, BlogCreationAttributes> {
   @Column({
     type: DataType.STRING,
   })
-  declare podcast_title: string;
+  declare blog_title: string;
 
   @Column({
     type: DataType.STRING,
-    unique: true,
   })
   declare blog_key: string;
 

@@ -1,22 +1,19 @@
 import { Table, Column, Model, DataType, CreatedAt, HasOne } from "sequelize-typescript";
 import Pages from "./Pages.model";
-import Articles from "./Articles.model";
 import Podcasts from "./Podcasts.model";
 import Episodes from "./Episodes.model";
 import Blogs from "./Blogs.model";
+import type Meta from "@src/models/meta.model";
 
-interface UrlsAttributes {
+interface UrlsAttributes extends Meta {
   id: string;
   url: string;
   page_category: string;
   name: string;
-  meta_title: string;
-  meta_description: string;
-  keywords: string;
   created_at: string;
 }
 
-type UrlsCreationAttributes = Omit<UrlsAttributes, "id" | "created_at" | "refresh_token">;
+type UrlsCreationAttributes = Omit<UrlsAttributes, "id" | "created_at">;
 
 @Table({
   tableName: "urls",
@@ -27,6 +24,7 @@ class Urls extends Model<UrlsAttributes, UrlsCreationAttributes> {
   @Column({
     primaryKey: true,
     type: DataType.UUID,
+    unique: true,
     defaultValue: DataType.UUIDV4,
   })
   declare id: string;
@@ -73,9 +71,6 @@ class Urls extends Model<UrlsAttributes, UrlsCreationAttributes> {
 
   @HasOne(() => Blogs, { foreignKey: { name: "id" }, onDelete: "CASCADE" })
   declare randomx: Blogs;
-
-  @HasOne(() => Articles, { foreignKey: { name: "id" }, onDelete: "CASCADE" })
-  declare randomd: Articles;
 
   @HasOne(() => Podcasts, { foreignKey: { name: "id" }, onDelete: "CASCADE" })
   declare randoms: Podcasts;
