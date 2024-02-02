@@ -1,17 +1,11 @@
 import express from "express";
-import {
-  createBlogPosts,
-  deleteBlogPost,
-  getBlogPost,
-  getBlogPosts,
-  updateBlogPost,
-} from "@controllers/blog_controller";
+import { createBlog, deleteBlog, getBlog, getBlogs, updateBlog } from "@controllers/blog_controller";
 import verifyJWT from "@middleware/verifyJWT";
 
 const blogRoutes = express.Router();
 
-blogRoutes.route("/").get(getBlogPosts).post(verifyJWT, createBlogPosts);
+blogRoutes.route("/").get(getBlogs).post(verifyJWT, createBlog);
 
-blogRoutes.route("/:id").get(getBlogPost).put(verifyJWT, updateBlogPost).delete(verifyJWT, deleteBlogPost);
+blogRoutes.route("/:id").get(getBlog).put(verifyJWT, updateBlog).delete(verifyJWT, deleteBlog);
 
 export default blogRoutes;

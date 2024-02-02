@@ -1,34 +1,35 @@
 import { type Response, type Request } from "express";
 import _ from "lodash";
-import database from "@config/mysql.config";
-import USER_QUERY from "@db/query/users_query";
 import httpStatus from "@db/http_status";
 import ResponseController from "./response_controller";
 import { isNewUserObject, isUpdateUserObject } from "@guards/user_guard";
 import { encryptPassword } from "./password_controller";
-import { type userObject } from "@models/user.model";
+import Users from "@db/models/Users.model";
+import { type userUpdateAttributes } from "@db/models/Users.model";
 
-export const getUsers = (_req: Request, res: Response): void => {
-  database.query(USER_QUERY.SELECT_USERS, (_error, results) => {
-    if (results === undefined) {
-      res
+export const getUsers = async (_req: Request, res: Response) => {
+  await Users.findAll()
+    .then((users) => {
+      return res
         .status(httpStatus.OK.code)
-        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "No users found"));
-    } else {
-      res
+        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Users retrieved", users));
+    })
+    .catch((_error: any) => {
+      return res
         .status(httpStatus.OK.code)
-        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Users retrieved", results));
-    }
-  });
+        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Cannot find Users"));
+    });
 };
 
-export const getUser = (req: Request, res: Response): void => {
-  database.query(
-    USER_QUERY.SELECT_USER("id"),
-    [req.params.id],
-    (_error, selectedUser: undefined | { "0": userObject }) => {
-      if (selectedUser?.[0] === undefined) {
-        res
+export const getUser = async (req: Request, res: Response) => {
+  await Users.findOne({
+    where: {
+      id: req.params.id,
+    },
+  })
+    .then((selectedUser) => {
+      if (selectedUser === null) {
+        return res
           .status(httpStatus.NOT_FOUND.code)
           .send(
             new ResponseController(
@@ -38,18 +39,20 @@ export const getUser = (req: Request, res: Response): void => {
             )
           );
       } else {
-        res
+        return res
           .status(httpStatus.OK.code)
-          .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, `User retreived`, selectedUser[0]));
+          .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, `User retreived`, selectedUser));
       }
-    }
-  );
+    })
+    .catch((error: any) => {
+      console.log(error);
+    });
 };
 
-export const createUser = (req: Request, res: Response): void => {
+export const createUser = (req: Request, res: Response) => {
   const newUser: Record<string, any> = req.body;
   if (!isNewUserObject(newUser)) {
-    res
+    return res
       .status(httpStatus.INTERNAL_SERVER_ERROR.code)
       .send(
         new ResponseController(
@@ -58,14 +61,12 @@ export const createUser = (req: Request, res: Response): void => {
           `No vaild data`
         )
       );
-    return;
   }
-  const userCopy = _.clone(newUser);
-  const hashedPswd = encryptPassword(userCopy.user_password);
+  const hashedPswd = encryptPassword(newUser.user_password);
   hashedPswd
-    .then((data) => {
+    .then(async (data) => {
       if (!_.isString(data)) {
-        res
+        return res
           .status(httpStatus.INTERNAL_SERVER_ERROR.code)
           .send(
             new ResponseController(
@@ -74,52 +75,26 @@ export const createUser = (req: Request, res: Response): void => {
               `Error occurred`
             )
           );
-        return;
+      } else {
+        newUser.user_password = data;
+        await Users.create(newUser).then((createdUser) => {
+          return res.status(httpStatus.CREATED.code).send(
+            new ResponseController(httpStatus.CREATED.code, httpStatus.CREATED.status, `User created`, {
+              createdUser,
+            })
+          );
+        });
       }
-      userCopy.user_password = data;
-
-      database.query(
-        USER_QUERY.CREATE_USER,
-        [userCopy.nick_name, userCopy.email, userCopy.user_password, userCopy.access_lvl],
-        (_error, result) => {
-          if (result === undefined) {
-            res
-              .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-              .send(
-                new ResponseController(
-                  httpStatus.INTERNAL_SERVER_ERROR.code,
-                  httpStatus.INTERNAL_SERVER_ERROR.status,
-                  `Error occurred`
-                )
-              );
-          } else {
-            res
-              .status(httpStatus.CREATED.code)
-              .send(
-                new ResponseController(httpStatus.CREATED.code, httpStatus.CREATED.status, `User created`, { newUser })
-              );
-          }
-        }
-      );
     })
-    .catch((_err: Error) => {
-      res
-        .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-        .send(
-          new ResponseController(
-            httpStatus.INTERNAL_SERVER_ERROR.code,
-            httpStatus.INTERNAL_SERVER_ERROR.status,
-            `Error occurred`
-          )
-        );
+    .catch((err: any) => {
+      console.log(err);
     });
 };
 
 export const updateUser = (req: Request, res: Response) => {
   const updateUserObject = req.body;
-  const copyupdateUserObject = _.clone(updateUserObject);
-  if (!isUpdateUserObject(copyupdateUserObject)) {
-    res
+  if (!isUpdateUserObject(updateUserObject)) {
+    return res
       .status(httpStatus.INTERNAL_SERVER_ERROR.code)
       .send(
         new ResponseController(
@@ -128,123 +103,104 @@ export const updateUser = (req: Request, res: Response) => {
           `No vaild data`
         )
       );
-    return;
-  }
-  database.query(
-    USER_QUERY.SELECT_USER("id"),
-    [req.params.id],
-    (_error, selectedUser: undefined | { "0": userObject }) => {
-      if (selectedUser?.[0] === undefined) {
-        res
-          .status(httpStatus.NOT_FOUND.code)
-          .send(
-            new ResponseController(
-              httpStatus.NOT_FOUND.code,
-              httpStatus.NOT_FOUND.status,
-              `User by id ${req.params.id} was not found`
-            )
-          );
-      } else {
-        if (copyupdateUserObject?.user_password === undefined) {
-          database.query(
-            USER_QUERY.UPDATE_USER(copyupdateUserObject),
-            [...Object.values(copyupdateUserObject), req.params.id],
-            (error, _results) => {
-              if (error === null) {
-                res
+  } else {
+    const userResponder = (userObject: Partial<userUpdateAttributes>) => {
+      Users.update(userObject, { where: { id: req.params.id } })
+        .then(async (updatedRows) => {
+          if (updatedRows[0] > 0) {
+            Users.findOne({ where: { id: req.params.id } })
+              .then((selectedUser) => {
+                return res
                   .status(httpStatus.OK.code)
-                  .send(
-                    new ResponseController(
-                      httpStatus.OK.code,
-                      httpStatus.OK.status,
-                      "User updated",
-                      _.defaults(copyupdateUserObject, selectedUser[0])
-                    )
-                  );
-              } else {
+                  .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "User updated", selectedUser));
+              })
+              .catch((err) => {
                 res
                   .status(httpStatus.INTERNAL_SERVER_ERROR.code)
                   .send(
                     new ResponseController(
                       httpStatus.INTERNAL_SERVER_ERROR.code,
                       httpStatus.INTERNAL_SERVER_ERROR.status,
-                      "Error occured"
+                      "Error occured",
+                      err
                     )
                   );
-              }
-            }
-          );
-        } else {
-          const hashedPswd = encryptPassword(copyupdateUserObject.user_password);
-          hashedPswd
-            .then((data) => {
-              if (!_.isString(data)) {
-                res
-                  .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-                  .send(
-                    new ResponseController(
-                      httpStatus.INTERNAL_SERVER_ERROR.code,
-                      httpStatus.INTERNAL_SERVER_ERROR.status,
-                      `Error occurred`
-                    )
-                  );
-              } else {
-                copyupdateUserObject.user_password = data;
-                database.query(
-                  USER_QUERY.UPDATE_USER(copyupdateUserObject),
-                  [...Object.values(copyupdateUserObject), req.params.id],
-                  (error) => {
-                    if (error === null) {
-                      res
-                        .status(httpStatus.OK.code)
-                        .send(
-                          new ResponseController(
-                            httpStatus.OK.code,
-                            httpStatus.OK.status,
-                            "User updated",
-                            _.defaults(copyupdateUserObject, selectedUser[0])
-                          )
-                        );
-                    } else {
-                      res
-                        .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-                        .send(
-                          new ResponseController(
-                            httpStatus.INTERNAL_SERVER_ERROR.code,
-                            httpStatus.INTERNAL_SERVER_ERROR.status,
-                            "Error occured"
-                          )
-                        );
-                    }
-                  }
-                );
-              }
-            })
-            .catch((_err) => {
-              res
-                .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-                .send(
-                  new ResponseController(
-                    httpStatus.INTERNAL_SERVER_ERROR.code,
-                    httpStatus.INTERNAL_SERVER_ERROR.status,
-                    "Error occured"
-                  )
-                );
-            });
-        }
-      }
+              });
+          } else {
+            return res
+              .status(httpStatus.NOT_FOUND.code)
+              .send(
+                new ResponseController(
+                  httpStatus.INTERNAL_SERVER_ERROR.code,
+                  httpStatus.INTERNAL_SERVER_ERROR.status,
+                  "No changes in user account / no valid user"
+                )
+              );
+          }
+        })
+        .catch((err) => {
+          return res
+            .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+            .send(
+              new ResponseController(
+                httpStatus.INTERNAL_SERVER_ERROR.code,
+                httpStatus.INTERNAL_SERVER_ERROR.status,
+                "User cannot be updated",
+                err
+              )
+            );
+        });
+    };
+    if (updateUserObject?.user_password) {
+      const hashedPswd = encryptPassword(updateUserObject.user_password);
+      hashedPswd
+        .then((data) => {
+          if (!_.isString(data)) {
+            return res
+              .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+              .send(
+                new ResponseController(
+                  httpStatus.INTERNAL_SERVER_ERROR.code,
+                  httpStatus.INTERNAL_SERVER_ERROR.status,
+                  "Error occured",
+                  data
+                )
+              );
+          } else {
+            updateUserObject.user_password = data;
+            userResponder(updateUserObject);
+          }
+        })
+        .catch((err) => {
+          return res
+            .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+            .send(
+              new ResponseController(
+                httpStatus.INTERNAL_SERVER_ERROR.code,
+                httpStatus.INTERNAL_SERVER_ERROR.status,
+                "Error occured",
+                err
+              )
+            );
+        });
+    } else {
+      userResponder(updateUserObject);
     }
-  );
+  }
 };
 
-export const deleteUser = (req: Request, res: Response) => {
-  database.query(USER_QUERY.DELETE_USER, [req.params.id], (_error, results) => {
-    if (results.affectedRows > 0) {
-      res
+export const deleteUser = async (req: Request, res: Response) => {
+  await Users.destroy({
+    where: {
+      id: req.params.id,
+    },
+  }).then((data) => {
+    if (data > 0) {
+      return res
         .status(httpStatus.OK.code)
         .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "User deleted"));
     } else {
-      res
+      return res
         .status(httpStatus.NOT_FOUND.code)
         .send(
           new ResponseController(
