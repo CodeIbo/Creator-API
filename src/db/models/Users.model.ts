@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, CreatedAt } from "sequelize-typescript";
 
-interface UserAttributes {
+export interface UserAttributes {
   id: string;
   email: string;
   nick_name: string;
@@ -10,7 +10,11 @@ interface UserAttributes {
   created_at: string;
 }
 
-type UserCreationAttributes = Omit<UserAttributes, "id" | "created_at" | "refresh_token">;
+export type UserCreationAttributes = Omit<UserAttributes, "id" | "created_at" | "refresh_token">;
+
+export type userUpdateAttributes = Partial<UserCreationAttributes>;
+
+export type userLoginAttributes = Pick<UserAttributes, "email" | "user_password">;
 
 @Table({
   timestamps: false,

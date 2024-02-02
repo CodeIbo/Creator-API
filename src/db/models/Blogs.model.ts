@@ -1,13 +1,15 @@
 import { Table, Column, Model, DataType, HasMany } from "sequelize-typescript";
 import Articles from "./Articles.model";
 
-interface BlogAttributes {
+export interface BlogAttributes {
   id: string;
   blog_title: string;
   blog_key: string;
 }
 
-type BlogCreationAttributes = BlogAttributes;
+export type BlogCreationAttributes = BlogAttributes;
+
+export type BlogUpdateAttributes = Partial<Omit<BlogAttributes, "id">>;
 
 @Table({
   timestamps: false,

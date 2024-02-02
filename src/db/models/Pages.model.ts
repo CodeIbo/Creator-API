@@ -1,12 +1,14 @@
 import { Table, Column, Model, DataType } from "sequelize-typescript";
 
-interface PageAttributes {
+export interface PageAttributes {
   id: string;
   page_content: string;
   page_type: string;
 }
 
-type PageCreationAttributes = PageAttributes;
+export type PageCreationAttributes = PageAttributes;
+
+export type PageUpdateAttributes = Partial<PageCreationAttributes>;
 
 @Table({
   timestamps: false,

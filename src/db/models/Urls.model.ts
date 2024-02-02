@@ -5,15 +5,19 @@ import Episodes from "./Episodes.model";
 import Blogs from "./Blogs.model";
 import type Meta from "@src/models/meta.model";
 
-interface UrlsAttributes extends Meta {
+export type pageCategory = "custom-page" | "blog" | "article" | "podcast" | "episode";
+
+export interface UrlsAttributes extends Meta {
   id: string;
   url: string;
-  page_category: string;
+  page_category: pageCategory;
   name: string;
   created_at: string;
 }
 
-type UrlsCreationAttributes = Omit<UrlsAttributes, "id" | "created_at">;
+export type UrlsCreationAttributes = Omit<UrlsAttributes, "id" | "created_at">;
+
+export type UrlsUpdateAttributes = Partial<UrlsCreationAttributes>;
 
 @Table({
   tableName: "urls",
@@ -48,12 +52,12 @@ class Urls extends Model<UrlsAttributes, UrlsCreationAttributes> {
   @Column({
     type: DataType.STRING,
   })
-  declare meta_title: string;
+  declare meta_data_title: string;
 
   @Column({
     type: DataType.STRING,
   })
-  declare meta_description: string;
+  declare meta_data_description: string;
 
   @Column({
     type: DataType.STRING,
