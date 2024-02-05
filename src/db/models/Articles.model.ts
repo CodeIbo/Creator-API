@@ -6,12 +6,17 @@ interface ArticlesAttributes extends Meta {
   url: string;
   blog_key: string;
   author: string;
+  article_title: string;
   article_content: string;
+  lead: string;
+  post_tags: string[];
   photo_url: string;
   date: Date;
 }
 
-type ArticlesCreationAttributes = Omit<ArticlesAttributes, "id">;
+export type ArticlesCreationAttributes = Omit<ArticlesAttributes, "id">;
+
+export type ArticlesUpdatenAttributes = Partial<Omit<ArticlesCreationAttributes, "blog_key">>;
 
 @Table({
   timestamps: false,
@@ -46,6 +51,21 @@ class Articles extends Model<ArticlesAttributes, ArticlesCreationAttributes> {
   @Column({
     type: DataType.TEXT("medium"),
   })
+  declare article_title: string;
+
+  @Column({
+    type: DataType.TEXT("medium"),
+  })
+  declare lead: string;
+
+  @Column({
+    type: DataType.JSON,
+  })
+  declare post_tags: string[];
+
+  @Column({
+    type: DataType.TEXT("medium"),
+  })
   declare article_content: string;
 
   @Column({
@@ -61,12 +81,12 @@ class Articles extends Model<ArticlesAttributes, ArticlesCreationAttributes> {
   @Column({
     type: DataType.STRING,
   })
-  declare meta_title: string;
+  declare meta_data_title: string;
 
   @Column({
     type: DataType.STRING,
   })
-  declare meta_description: string;
+  declare meta_data_description: string;
 
   @Column({
     type: DataType.STRING,

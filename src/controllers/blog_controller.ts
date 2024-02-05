@@ -218,7 +218,7 @@ export const deleteBlog = async (req: Request, res: Response) => {
         new ResponseController(
           httpStatus.NOT_FOUND.code,
           httpStatus.NOT_FOUND.status,
-          `Page by id ${req.params.id} was not found`
+          `Blog by id ${req.params.id} was not found`
         )
       );
   }

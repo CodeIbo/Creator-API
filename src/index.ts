@@ -2,10 +2,12 @@ import cors from "cors";
 import express from "express";
 import cookieparser from "cookie-parser";
 import dotenv from "dotenv";
+import "@config/mysql.config";
 import userRoutes from "@routes/user.route";
 import pageRoutes from "@routes/page.route";
 import authRoutes from "@routes/auth.route";
 import blogRoutes from "@routes/blog.route";
+import articleRoute from "@routes/article.route";
 
 dotenv.config();
 const app = express();
@@ -24,6 +26,8 @@ app.use("/users", userRoutes);
 app.use("/pages", pageRoutes);
 
 app.use("/blog", blogRoutes);
+
+app.use("/article", articleRoute);
 
 app.listen(Number(process.env.SERVER_PORT) ?? 6666, () => {
   console.log(`Aplikacja wystartowała na porcie ${process.env.SERVER_PORT ?? "6666"}`);
