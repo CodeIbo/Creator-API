@@ -1,6 +1,6 @@
 import Urls, { type pageCategory } from "@db/models/Urls.model";
 import { isNewUrlObject, isUpdateUrlObject } from "@src/guards/url_guard";
-import { keysFilter } from "@src/helpers/keysFilter";
+import { keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
 
 export const getUrlsByCategory = async (category: pageCategory) => {

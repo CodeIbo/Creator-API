@@ -1,25 +1,13 @@
 import _ from "lodash";
-import { keysFilter } from "@src/helpers/keysFilter";
+import { keysFilter, keyVerificator } from "@src/helpers/key.helper";
 import Articles, { type ArticlesCreationAttributes, type ArticlesUpdatenAttributes } from "@db/models/Articles.model";
-import { isValidDate } from "@src/helpers/isValidDate";
+import { isValidDate } from "@src/helpers/date.helper";
 
 const articleNewKeys = keysFilter(Articles, ["id", "created_at"], false);
 const articleUpdateKeys = keysFilter(Articles, ["id", "created_at", "blog_key"], false);
 
-const verifyArticleKeys = (
-  unknownObject: Record<string, any>,
-  allowedKeys: string[],
-  isUpdate: boolean = false
-): boolean => {
-  const objectKeys = Object.keys(unknownObject);
-  if (!isUpdate) {
-    return allowedKeys.every((key) => objectKeys.includes(key));
-  }
-  return objectKeys.every((key) => allowedKeys.includes(key)) && objectKeys.length > 0;
-};
-
 export function isNewArticleObject(obj: Record<string, any>): obj is ArticlesCreationAttributes {
-  if (!verifyArticleKeys(obj, articleNewKeys)) return false;
+  if (!keyVerificator(obj, articleNewKeys)) return false;
   return (
     _.isString(obj.url) &&
     _.isString(obj.blog_key) &&
@@ -37,7 +25,7 @@ export function isNewArticleObject(obj: Record<string, any>): obj is ArticlesCre
 }
 
 export function isUpdateArticleObject(obj: Record<string, any>): obj is ArticlesUpdatenAttributes {
-  if (!verifyArticleKeys(obj, articleUpdateKeys, true)) return false;
+  if (!keyVerificator(obj, articleUpdateKeys, true)) return false;
   return (
     _.isString(obj.url) ||
     _.isString(obj.author) ||

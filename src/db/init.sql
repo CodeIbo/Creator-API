@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS coredb.articles (
   author VARCHAR(255) NULL,
   article_title TEXT NULL,
   lead TEXT NULL,
-  post_tags JSON NOT NULL '[]',
+  tags JSON NOT NULL DEFAULT (json_array()),
   article_content TEXT NULL,
   photo_url VARCHAR(255) NULL,
   date DATE NULL,
@@ -105,8 +105,8 @@ CREATE TABLE IF NOT EXISTS coredb.podcasts (
   CONSTRAINT podcast_key_url
     FOREIGN KEY (id)
     REFERENCES urls (ID)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -114,22 +114,23 @@ CREATE TABLE IF NOT EXISTS coredb.podcasts (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS coredb.episodes (
   id CHAR(36) NOT NULL,
-  title VARCHAR(255) NULL,
+  episode_title VARCHAR(255) NULL,
   episode_content TEXT NULL,
   announcement_url VARCHAR(255) NULL,
-  Date DATE NULL,
+  url VARCHAR(255) NOT NULL,
+  date DATE NULL,
   author VARCHAR(255) NULL,
-  tags VARCHAR(255) NULL,
+  tags JSON NOT NULL DEFAULT (json_array()),
   podcast_key VARCHAR(36) NOT NULL,
+  meta_data_title VARCHAR(255) NULL,
+  meta_data_description VARCHAR(255) NULL,
+  keywords VARCHAR(255) NULL,
   PRIMARY KEY (id),
-  INDEX url_episode_key_idx (podcast_name ASC) VISIBLE,
+  UNIQUE INDEX Id_UNIQUE (id ASC) VISIBLE,
+  UNIQUE INDEX url_UNIQUE (url ASC) VISIBLE,
   CONSTRAINT episode_key
     FOREIGN KEY (podcast_key)
     REFERENCES podcasts (podcast_key)
     ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT url_episode_key
-    FOREIGN KEY (id)
-    REFERENCES urls (id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION);
+    ON UPDATE CASCADE
+);

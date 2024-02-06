@@ -8,6 +8,7 @@ import pageRoutes from "@routes/page.route";
 import authRoutes from "@routes/auth.route";
 import blogRoutes from "@routes/blog.route";
 import articleRoute from "@routes/article.route";
+import podcastRoutes from "@routes/podcast.route";
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,8 @@ app.use("/pages", pageRoutes);
 app.use("/blog", blogRoutes);
 
 app.use("/article", articleRoute);
+
+app.use("/podcast", podcastRoutes);
 
 app.listen(Number(process.env.SERVER_PORT) ?? 6666, () => {
   console.log(`Aplikacja wystartowała na porcie ${process.env.SERVER_PORT ?? "6666"}`);

@@ -1,41 +1,29 @@
 import _ from "lodash";
 import Urls, { type UrlsUpdateAttributes, type UrlsCreationAttributes } from "@db/models/Urls.model";
-import { keysFilter } from "@src/helpers/keysFilter";
+import { keyVerificator, keysFilter } from "@src/helpers/key.helper";
 
-const verifyUrlKeys = (unkownObject: Record<string, any>, isNew: boolean) => {
-  const urlKeys = keysFilter(Urls, ["id", "created_at"], false);
-
-  if (isNew) {
-    return urlKeys.every((key) => {
-      return Object.prototype.hasOwnProperty.call(unkownObject, key);
-    });
-  } else {
-    return urlKeys.some((key) => {
-      return Object.prototype.hasOwnProperty.call(unkownObject, key);
-    });
-  }
-};
+const urlKeys = keysFilter(Urls, ["id", "created_at"], false);
 
 export function isNewUrlObject(obj: Record<string, any>): obj is UrlsCreationAttributes {
+  if (!keyVerificator(obj, urlKeys)) return false;
   return (
     _.isString(obj.url) &&
     _.isString(obj.name) &&
     _.isString(obj.page_category) &&
     _.isString(obj.meta_data_title) &&
     _.isString(obj.meta_data_description) &&
-    _.isString(obj.keywords) &&
-    verifyUrlKeys(obj, true)
+    _.isString(obj.keywords)
   );
 }
 
 export function isUpdateUrlObject(obj: Record<string, any>): obj is UrlsUpdateAttributes {
+  if (!keyVerificator(obj, urlKeys, true)) return false;
   return (
-    (_.isString(obj.url) ||
-      _.isString(obj.name) ||
-      _.isString(obj.page_category) ||
-      _.isString(obj.meta_data_title) ||
-      _.isString(obj.meta_data_description) ||
-      _.isString(obj.keywords)) &&
-    verifyUrlKeys(obj, false)
+    _.isString(obj.url) ||
+    _.isString(obj.name) ||
+    _.isString(obj.page_category) ||
+    _.isString(obj.meta_data_title) ||
+    _.isString(obj.meta_data_description) ||
+    _.isString(obj.keywords)
   );
 }

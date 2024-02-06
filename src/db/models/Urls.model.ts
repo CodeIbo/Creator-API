@@ -1,7 +1,6 @@
 import { Table, Column, Model, DataType, CreatedAt, HasOne } from "sequelize-typescript";
 import Pages from "./Pages.model";
 import Podcasts from "./Podcasts.model";
-import Episodes from "./Episodes.model";
 import Blogs from "./Blogs.model";
 import type Meta from "@src/models/meta.model";
 
@@ -78,9 +77,6 @@ class Urls extends Model<UrlsAttributes, UrlsCreationAttributes> {
 
   @HasOne(() => Podcasts, { foreignKey: { name: "id" }, onDelete: "CASCADE" })
   declare randoms: Podcasts;
-
-  @HasOne(() => Episodes, { foreignKey: { name: "id" }, onDelete: "CASCADE" })
-  declare randomw: Episodes;
 }
 
 export default Urls;

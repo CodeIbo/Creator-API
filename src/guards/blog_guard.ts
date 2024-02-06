@@ -1,5 +1,5 @@
 import Blogs, { type BlogUpdateAttributes, type BlogCreationAttributes } from "@db/models/Blogs.model";
-import { keysFilter } from "@src/helpers/keysFilter";
+import { keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
 import { isNewUrlObject, isUpdateUrlObject } from "./url_guard";
 import { type UrlsUpdateAttributes, type UrlsCreationAttributes } from "@db/models/Urls.model";

@@ -1,17 +1,20 @@
-import { Table, Column, Model, DataType, ForeignKey } from "sequelize-typescript";
-import Urls from "./Urls.model";
-import Podcasts from "./Podcasts.model";
+import type Meta from "@src/models/meta.model";
+import { Table, Column, Model, DataType } from "sequelize-typescript";
 
-interface EpisodeAttributes {
+interface EpisodeAttributes extends Meta {
   id: string;
-  blog_key: string;
+  episode_title: string;
+  episode_content: string;
+  announcement_url: string;
+  date: Date;
   author: string;
-  article_content: string;
-  photo_url: string;
-  date: string;
+  tags: string[];
+  podcast_key: string;
 }
 
-type EpisodeCreationAttributes = EpisodeAttributes;
+export type EpisodeCreationAttributes = EpisodeAttributes;
+
+export type EpisodeUpdatenAttributes = Partial<Omit<EpisodeCreationAttributes, "podcast_key">>;
 
 @Table({
   timestamps: false,
@@ -19,15 +22,14 @@ type EpisodeCreationAttributes = EpisodeAttributes;
   modelName: "Episodes",
 })
 class Episodes extends Model<EpisodeAttributes, EpisodeCreationAttributes> {
-  @ForeignKey(() => Urls)
   @Column({
     primaryKey: true,
     type: DataType.UUID,
     unique: true,
+    defaultValue: DataType.UUIDV4,
   })
   declare id: string;
 
-  @ForeignKey(() => Podcasts)
   @Column({
     type: DataType.STRING,
   })
@@ -54,9 +56,24 @@ class Episodes extends Model<EpisodeAttributes, EpisodeCreationAttributes> {
   declare date: Date;
 
   @Column({
+    type: DataType.JSON,
+  })
+  declare tags: string[];
+
+  @Column({
     type: DataType.STRING,
   })
-  declare tags: string;
+  declare meta_data_title: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  declare meta_data_description: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  declare keywords: string;
 }
 
 export default Episodes;

@@ -1,6 +1,15 @@
 import { Table, Column, Model, DataType, HasMany } from "sequelize-typescript";
 import Episodes from "./Episodes.model";
 
+export interface PodcastAttributes {
+  id: string;
+  podcast_title: string;
+  podcast_key: string;
+}
+
+export type PodcastCreationAttributes = PodcastAttributes;
+
+export type PodcastUpdateAttributes = Partial<Omit<PodcastCreationAttributes, "id">>;
 @Table({
   timestamps: false,
   tableName: "podcasts",
