@@ -1,25 +1,37 @@
-import mysql, { type MysqlError } from "mysql";
 import dotenv from "dotenv";
+import { Sequelize } from "sequelize-typescript";
+import * as path from "path";
 
 dotenv.config();
-const database = mysql.createPool({
-  host: process.env.DB_HOST,
-  port: 3306,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  connectionLimit: Number(process.env.DB_CONNECTION_LIMIT),
+
+const sequalizeDB = new Sequelize(
+  String(process.env.DB_NAME),
+  String(process.env.DB_USER),
+  String(process.env.DB_PASSWORD),
+  {
+    host: String(process.env.DB_HOST),
+    port: 3306,
+    dialect: "mysql",
+    pool: {
+      max: Number(process.env.DB_CONNECTION_LIMIT),
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
+    models: [path.join(__dirname, "../db/models/*.model.ts")],
+  }
+);
+const checkConnection = async () => {
+  try {
+    await sequalizeDB.authenticate();
+    console.log("Connection has been established successfully.");
+  } catch (error) {
+    console.error("Unable to connect to the database:", error);
+  }
+};
+
+checkConnection().catch((err) => {
+  console.log(err);
 });
 
-const checkConnection = () => {
-  database.getConnection((err: MysqlError, connection) => {
-    if (err !== null) {
-      console.error("Error connecting to MySQL:", err);
-    }
-    console.log("Connected to MySQL.");
-    connection.release();
-  });
-};
-checkConnection();
-
-export default database;
+export default sequalizeDB;

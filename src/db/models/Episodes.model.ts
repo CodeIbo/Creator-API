@@ -6,13 +6,15 @@ interface EpisodeAttributes extends Meta {
   episode_title: string;
   episode_content: string;
   announcement_url: string;
+  photo_url: string;
+  url: string;
   date: Date;
   author: string;
-  tags: string[];
+  episode_tags: string[];
   podcast_key: string;
 }
 
-export type EpisodeCreationAttributes = EpisodeAttributes;
+export type EpisodeCreationAttributes = Omit<EpisodeAttributes, "id">;
 
 export type EpisodeUpdatenAttributes = Partial<Omit<EpisodeCreationAttributes, "podcast_key">>;
 
@@ -47,8 +49,19 @@ class Episodes extends Model<EpisodeAttributes, EpisodeCreationAttributes> {
 
   @Column({
     type: DataType.STRING,
+    unique: true,
+  })
+  declare url: string;
+
+  @Column({
+    type: DataType.STRING,
   })
   declare announcement_url: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  declare photo_url: string;
 
   @Column({
     type: DataType.DATE,
@@ -58,7 +71,7 @@ class Episodes extends Model<EpisodeAttributes, EpisodeCreationAttributes> {
   @Column({
     type: DataType.JSON,
   })
-  declare tags: string[];
+  declare episode_tags: string[];
 
   @Column({
     type: DataType.STRING,
