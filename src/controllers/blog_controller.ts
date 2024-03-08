@@ -60,7 +60,7 @@ export const getBlog = (req: Request, res: Response): void => {
           .then((blog) => {
             if (blog !== null && data.data) {
               return res
-                .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+                .status(httpStatus.OK.code)
                 .send(
                   new ResponseController(
                     httpStatus.OK.code,
@@ -100,7 +100,7 @@ export const createBlog = (req: Request, res: Response): void => {
   } else {
     addNewUrl(newBlog)
       .then((data) => {
-        if (data.status && !!data.data) {
+        if (data.status && data.data) {
           Blogs.create({ id: data.data.id, blog_title: newBlog.blog_title, blog_key: newBlog.blog_key })
             .then((page) => {
               return res
@@ -121,10 +121,15 @@ export const createBlog = (req: Request, res: Response): void => {
             });
         } else {
           return res.status(httpStatus.INTERNAL_SERVER_ERROR.code).send(
-            new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Failed adding URL", {
-              status: data.status,
-              err: data.err,
-            })
+            new ResponseController(
+              httpStatus.INTERNAL_SERVER_ERROR.code,
+              httpStatus.INTERNAL_SERVER_ERROR.status,
+              "Failed adding URL",
+              {
+                status: data.status,
+                err: data.err,
+              }
+            )
           );
         }
       })

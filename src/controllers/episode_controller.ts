@@ -6,22 +6,28 @@ import Episodes from "@db/models/Episodes.model";
 import { isNewEpisodeObject, isUpdateEpisodeObject } from "@src/guards/episode_guard";
 
 export const getEpisodesByKey = async (req: Request, res: Response) => {
-  const podcastKey = req.body.podcast_key;
-  await Episodes.findAll({
-    where: {
-      podcast_key: podcastKey,
-    },
-  })
-    .then((data) => {
-      return res
-        .status(httpStatus.OK.code)
-        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Founded Episodes", data));
+  const podcastKey = req.query.podcast_key;
+  if (_.isString(podcastKey)) {
+    await Episodes.findAll({
+      where: {
+        podcast_key: podcastKey,
+      },
     })
-    .catch((err) => {
-      return res
-        .status(httpStatus.BAD_REQUEST.code)
-        .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Error", err));
-    });
+      .then((data) => {
+        return res
+          .status(httpStatus.OK.code)
+          .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Founded Episodes", data));
+      })
+      .catch((err) => {
+        return res
+          .status(httpStatus.BAD_REQUEST.code)
+          .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Error", err));
+      });
+  } else {
+    return res
+      .status(httpStatus.BAD_REQUEST.code)
+      .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Error Query Params"));
+  }
 };
 
 export const getEpisode = async (req: Request, res: Response) => {

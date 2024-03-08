@@ -62,7 +62,7 @@ export const getPodcast = (req: Request, res: Response): void => {
           .then((podcast) => {
             if (podcast !== null && data.data) {
               return res
-                .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+                .status(httpStatus.OK.code)
                 .send(
                   new ResponseController(
                     httpStatus.OK.code,

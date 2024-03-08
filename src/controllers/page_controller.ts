@@ -35,19 +35,15 @@ export const getPages = (_req: Request, res: Response): void => {
       } else {
         return res
           .status(httpStatus.NOT_FOUND.code)
-          .send(
-            new ResponseController(
-              httpStatus.NOT_FOUND.code,
-              httpStatus.NOT_FOUND.status,
-              `Found ${data.data.length} items in custom-page category`
-            )
-          );
+          .send(new ResponseController(httpStatus.NOT_FOUND.code, httpStatus.NOT_FOUND.status, `Wrong page category`));
       }
     })
     .catch((err) => {
       return res
         .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, err));
+        .send(
+          new ResponseController(httpStatus.INTERNAL_SERVER_ERROR.code, httpStatus.INTERNAL_SERVER_ERROR.status, err)
+        );
     });
 };
 
@@ -59,7 +55,7 @@ export const getPage = (req: Request, res: Response): void => {
           .then((page) => {
             if (page !== null && data.data) {
               return res
-                .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+                .status(httpStatus.OK.code)
                 .send(
                   new ResponseController(
                     httpStatus.OK.code,
@@ -73,7 +69,14 @@ export const getPage = (req: Request, res: Response): void => {
           .catch((err) => {
             return res
               .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-              .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Error", err));
+              .send(
+                new ResponseController(
+                  httpStatus.INTERNAL_SERVER_ERROR.code,
+                  httpStatus.INTERNAL_SERVER_ERROR.status,
+                  "Error",
+                  err
+                )
+              );
           });
       }
     })
@@ -88,14 +91,8 @@ export const createPage = (req: Request, res: Response): void => {
   const newPage = req.body;
   if (!isNewPageObject(newPage)) {
     res
-      .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-      .send(
-        new ResponseController(
-          httpStatus.INTERNAL_SERVER_ERROR.code,
-          httpStatus.INTERNAL_SERVER_ERROR.status,
-          `No valid data`
-        )
-      );
+      .status(httpStatus.BAD_REQUEST.code)
+      .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, `No valid data`));
   } else {
     addNewUrl(newPage)
       .then((data) => {
@@ -119,8 +116,8 @@ export const createPage = (req: Request, res: Response): void => {
                 .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, err));
             });
         } else {
-          return res.status(httpStatus.INTERNAL_SERVER_ERROR.code).send(
-            new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Failed adding URL", {
+          return res.status(httpStatus.BAD_REQUEST.code).send(
+            new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Failed adding URL", {
               status: data.status,
               err: data.err,
             })

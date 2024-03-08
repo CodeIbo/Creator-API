@@ -64,6 +64,11 @@ class Episodes extends Model<EpisodeAttributes, EpisodeCreationAttributes> {
   declare photo_url: string;
 
   @Column({
+    type: DataType.STRING,
+  })
+  declare episode_title: string;
+
+  @Column({
     type: DataType.DATE,
   })
   declare date: Date;

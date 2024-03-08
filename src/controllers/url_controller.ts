@@ -10,7 +10,7 @@ export const getUrlsByCategory = async (category: pageCategory) => {
     },
   });
   return {
-    status: urls.length > 0,
+    status: urls.length >= 0,
     data: urls,
   };
 };

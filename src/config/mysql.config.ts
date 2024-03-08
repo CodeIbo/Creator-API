@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize-typescript";
 import * as path from "path";
+import { development } from "@db/config/config";
 
 dotenv.config();
 
@@ -9,9 +10,10 @@ const sequalizeDB = new Sequelize(
   String(process.env.DB_USER),
   String(process.env.DB_PASSWORD),
   {
-    host: String(process.env.DB_HOST),
-    port: 3306,
-    dialect: "mysql",
+    host: development.host,
+    port: development.port,
+    dialect: development.dialect,
+    database: development.database,
     pool: {
       max: Number(process.env.DB_CONNECTION_LIMIT),
       min: 0,

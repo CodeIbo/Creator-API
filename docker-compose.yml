@@ -6,10 +6,9 @@ services:
     restart: unless-stopped
     volumes:
       - ./src/db/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - sqldb_data:/var/lib/mysql
     ports:
-      - ${DB_PORT}:3306
-    expose:
-      - 3306
+      - ${DB_EXTERNAL_PORT}:${DB_INTERNAL_PORT}
     environment:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
@@ -27,13 +26,14 @@ services:
     build: .
     volumes:
       - .:/usr/code
+      - node_api_volume:/var/lib/node_server
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     expose:
       - ${SERVER_PORT}
     environment:
       DB_HOST: sqldb
-      DB_PORT: ${DB_PORT}
+      DB_PORT: ${DB_INTERNAL_PORT}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
@@ -49,3 +49,7 @@ services:
 networks:
   internalnet:
     driver: bridge
+
+volumes:
+  sqldb_data:
+  node_api_volume:

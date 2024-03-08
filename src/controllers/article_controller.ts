@@ -6,22 +6,28 @@ import ResponseController from "./response_controller";
 import { type Response, type Request } from "express";
 
 export const getArticlesByKey = async (req: Request, res: Response) => {
-  const blogKey = req.body.blog_key;
-  await Articles.findAll({
-    where: {
-      blog_key: blogKey,
-    },
-  })
-    .then((data) => {
-      return res
-        .status(httpStatus.OK.code)
-        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Founded Articles", data));
+  const blogKey = req.query.blog_key;
+  if (_.isString(blogKey)) {
+    await Articles.findAll({
+      where: {
+        blog_key: blogKey,
+      },
     })
-    .catch((err) => {
-      return res
-        .status(httpStatus.BAD_REQUEST.code)
-        .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Error", err));
-    });
+      .then((data) => {
+        return res
+          .status(httpStatus.OK.code)
+          .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Founded Articles", data));
+      })
+      .catch((err) => {
+        return res
+          .status(httpStatus.BAD_REQUEST.code)
+          .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Error", err));
+      });
+  } else {
+    return res
+      .status(httpStatus.BAD_REQUEST.code)
+      .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Error Query Params"));
+  }
 };
 
 export const getArticle = async (req: Request, res: Response) => {
