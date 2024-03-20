@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize-typescript";
-import * as path from "path";
-import { development } from "@db/config/config";
+import { development, test, production } from "@db/config/config";
+import { appState } from "@src/helpers/appState.helper";
 
 dotenv.config();
 
@@ -9,19 +9,7 @@ const sequalizeDB = new Sequelize(
   String(process.env.DB_NAME),
   String(process.env.DB_USER),
   String(process.env.DB_PASSWORD),
-  {
-    host: development.host,
-    port: development.port,
-    dialect: development.dialect,
-    database: development.database,
-    pool: {
-      max: Number(process.env.DB_CONNECTION_LIMIT),
-      min: 0,
-      acquire: 30000,
-      idle: 10000,
-    },
-    models: [path.join(__dirname, "../db/models/*.model.ts")],
-  }
+  appState(development, production, test)
 );
 const checkConnection = async () => {
   try {

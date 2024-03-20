@@ -14,7 +14,7 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      SERVICE_TAGS: prod
+      SERVICE_TAGS: ${NODE_ENV}
       SERVICE_NAME: sqldb
     networks:
       - internalnet
@@ -31,16 +31,7 @@ services:
       - ${SERVER_PORT}:${SERVER_PORT}
     expose:
       - ${SERVER_PORT}
-    environment:
-      DB_HOST: sqldb
-      DB_PORT: ${DB_INTERNAL_PORT}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      DB_CONNECTION_LIMIT: ${DB_CONNECTION_LIMIT}
-      SERVICE_TAGS: prod
-      SERVICE_NAME: nodeappservice
-      SERVER_PORT: ${SERVER_PORT}
+
     depends_on:
       - sqldb
     networks:
