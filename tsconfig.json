@@ -47,6 +47,8 @@
   ],
   "exclude": [
     "node_modules",
-    ".env"
+    ".env",
+    "src/db/init.sql",
+    "__tests__"
   ]
 }

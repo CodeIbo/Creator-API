@@ -42,11 +42,5 @@ export const production = {
     acquire: 30000,
     idle: 10000,
   },
-  ssl: true,
-  dialectOptions: {
-    ssl: {
-      require: true,
-    },
-  },
   models: [path.join(__dirname, "../models/*.model.js")],
 };

@@ -11,9 +11,11 @@ import articleRoute from "@routes/article.route";
 import podcastRoutes from "@routes/podcast.route";
 import episodeRoutes from "@routes/episode.route";
 
+const accessURLS = [process.env.PANEL_URL, process.env.FRONT_END_URL].filter(Boolean) as string[];
+
 dotenv.config();
 const app = express();
-app.use(cors({ credentials: true }));
+app.use(cors({ credentials: true, origin: accessURLS }));
 app.use(express.json());
 app.use(cookieparser());
 
