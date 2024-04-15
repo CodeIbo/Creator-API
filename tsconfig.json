@@ -49,6 +49,6 @@
     "node_modules",
     ".env",
     "src/db/init.sql",
-    "__tests__"
+    "__tests__",
   ]
 }
