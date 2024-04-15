@@ -37,5 +37,6 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "import/no-unresolved": "off",
+    "@typescript-eslint/no-misused-promises": "off",
   },
 };

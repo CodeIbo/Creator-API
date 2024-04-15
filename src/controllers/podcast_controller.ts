@@ -1,32 +1,34 @@
 import httpStatus from "@db/http_status";
 import ResponseController from "./response_controller";
 import { type Response, type Request } from "express";
-import { isNewBlogObject, isUpdateBlogObject } from "@guards/blog_guard";
 import { addNewUrl, deleteUrlObject, getUrlById, getUrlsByCategory, updateUrlObject } from "./url_controller";
-import Blogs from "@db/models/Blogs.model";
+import Podcasts from "@db/models/Podcasts.model";
 import _ from "lodash";
 import { keysFilter } from "@src/helpers/key.helper";
+import { isNewPodcastObject, isUpdatePodcastObject } from "@src/guards/podcast_guard";
 
-export const getBlogs = (_req: Request, res: Response): void => {
-  getUrlsByCategory("blog")
+export const getPodcasts = (_req: Request, res: Response): void => {
+  getUrlsByCategory("podcast")
     .then((data) => {
       if (data.status) {
-        Blogs.findAll()
-          .then((blogs) => {
-            const updatedBlogs = blogs.map((blog) => {
+        Podcasts.findAll()
+          .then((podcast) => {
+            const updatedPodcasts = podcast.map((podcast) => {
               const urlList = data.data.filter((url) => {
-                return url.id === blog.id;
+                return url.id === podcast.id;
               });
-              let updatedBlog = blog.get();
+              let updatedPodcast = podcast.get();
 
               urlList.forEach((urlObj) => {
-                updatedBlog = _.defaults(updatedBlog, urlObj.get());
+                updatedPodcast = _.defaults(updatedPodcast, urlObj.get());
               });
-              return updatedBlog;
+              return updatedPodcast;
             });
             return res
               .status(httpStatus.OK.code)
-              .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Blogs", updatedBlogs));
+              .send(
+                new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Podcasts", updatedPodcasts)
+              );
           })
           .catch((err) => {
             return res
@@ -40,7 +42,7 @@ export const getBlogs = (_req: Request, res: Response): void => {
             new ResponseController(
               httpStatus.NOT_FOUND.code,
               httpStatus.NOT_FOUND.status,
-              `Found ${data.data.length} items in blog category`
+              `Found ${data.data.length} items in podcast category`
             )
           );
       }
@@ -52,21 +54,21 @@ export const getBlogs = (_req: Request, res: Response): void => {
     });
 };
 
-export const getBlog = (req: Request, res: Response): void => {
+export const getPodcast = (req: Request, res: Response): void => {
   getUrlById(req.params.id)
     .then((data) => {
       if (data.status) {
-        Blogs.findOne({ where: { id: req.params.id } })
-          .then((blog) => {
-            if (blog !== null && data.data) {
+        Podcasts.findOne({ where: { id: req.params.id } })
+          .then((podcast) => {
+            if (podcast !== null && data.data) {
               return res
                 .status(httpStatus.OK.code)
                 .send(
                   new ResponseController(
                     httpStatus.OK.code,
                     httpStatus.OK.status,
-                    "Blog received",
-                    _.defaults(blog.get({ plain: true }), data.data.get({ plain: true }))
+                    "Podcast received",
+                    _.defaults(podcast.get({ plain: true }), data.data.get({ plain: true }))
                   )
                 );
             }
@@ -85,9 +87,9 @@ export const getBlog = (req: Request, res: Response): void => {
     });
 };
 
-export const createBlog = (req: Request, res: Response): void => {
-  const newBlog = req.body;
-  if (!isNewBlogObject(newBlog)) {
+export const createPodcast = (req: Request, res: Response): void => {
+  const newPodcast = req.body;
+  if (!isNewPodcastObject(newPodcast)) {
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR.code)
       .send(
@@ -98,11 +100,15 @@ export const createBlog = (req: Request, res: Response): void => {
         )
       );
   } else {
-    addNewUrl(newBlog)
+    addNewUrl(newPodcast)
       .then((data) => {
-        if (data.status && data.data) {
-          Blogs.create({ id: data.data.id, blog_title: newBlog.blog_title, blog_key: newBlog.blog_key })
-            .then((page) => {
+        if (data.status && !!data.data) {
+          Podcasts.create({
+            id: data.data.id,
+            podcast_title: newPodcast.podcast_title,
+            podcast_key: newPodcast.podcast_key,
+          })
+            .then((podcast) => {
               return res
                 .status(httpStatus.OK.code)
                 .send(
@@ -110,7 +116,7 @@ export const createBlog = (req: Request, res: Response): void => {
                     httpStatus.OK.code,
                     httpStatus.OK.status,
                     `New Item added`,
-                    _.defaults(page.get({ plain: true }), data.data.get({ plain: true }))
+                    _.defaults(podcast.get({ plain: true }), data.data.get({ plain: true }))
                   )
                 );
             })
@@ -121,15 +127,10 @@ export const createBlog = (req: Request, res: Response): void => {
             });
         } else {
           return res.status(httpStatus.INTERNAL_SERVER_ERROR.code).send(
-            new ResponseController(
-              httpStatus.INTERNAL_SERVER_ERROR.code,
-              httpStatus.INTERNAL_SERVER_ERROR.status,
-              "Failed adding URL",
-              {
-                status: data.status,
-                err: data.err,
-              }
-            )
+            new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Failed adding URL", {
+              status: data.status,
+              err: data.err,
+            })
           );
         }
       })
@@ -141,10 +142,10 @@ export const createBlog = (req: Request, res: Response): void => {
   }
 };
 
-export const updateBlog = (req: Request, res: Response) => {
-  const updateBlogObj = req.body;
-  if (!isUpdateBlogObject(updateBlogObj)) {
-    return res
+export const updatePodcast = (req: Request, res: Response) => {
+  const updatePodcastObj = req.body;
+  if (!isUpdatePodcastObject(updatePodcastObj)) {
+    res
       .status(httpStatus.INTERNAL_SERVER_ERROR.code)
       .send(
         new ResponseController(
@@ -154,45 +155,45 @@ export const updateBlog = (req: Request, res: Response) => {
         )
       );
   } else {
-    const blogKeys = keysFilter(Blogs, ["id", "created_at"], false);
-    const filteredObject = _.pickBy(updateBlogObj, (v: any, k: string) => {
-      return blogKeys.includes(k);
+    const podcastKeys = keysFilter(Podcasts, ["id", "created_at"], false);
+    const filteredObject = _.pickBy(updatePodcastObj, (v: any, k: string) => {
+      return podcastKeys.includes(k);
     });
-    updateUrlObject(updateBlogObj, req.params.id)
+    updateUrlObject(updatePodcastObj, req.params.id)
       .then(async (data) => {
         if (data?.status && data.data) {
           if (Object.keys(filteredObject).length > 0) {
-            await Blogs.update(filteredObject, { where: { id: req.params.id } }).catch((_err) => {
+            await Podcasts.update(filteredObject, { where: { id: req.params.id } }).catch((_err) => {
               return res
                 .status(httpStatus.NOT_FOUND.code)
                 .send(
                   new ResponseController(
                     httpStatus.NOT_FOUND.code,
                     httpStatus.NOT_FOUND.status,
-                    `Blog by id ${req.params.id} was not found`,
+                    `Podcast by id ${req.params.id} was not found`,
                     _err
                   )
                 );
             });
           }
           const updatedUrl = await getUrlById(req.params.id);
-          const updatedBlog = await Blogs.findOne({ where: { id: req.params.id } });
-          if (updatedUrl.data && updatedUrl.status && updatedBlog) {
+          const updatedPodcast = await Podcasts.findOne({ where: { id: req.params.id } });
+          if (updatedUrl.data && updatedUrl.status && updatedPodcast) {
             return res
               .status(httpStatus.OK.code)
               .send(
                 new ResponseController(
                   httpStatus.OK.code,
                   httpStatus.OK.status,
-                  `Blog Updated`,
-                  _.defaults(updatedBlog.get(), updatedUrl.data.get())
+                  `Podcast Updated`,
+                  _.defaults(updatedPodcast.get(), updatedUrl.data.get())
                 )
               );
           }
         } else {
           return res
             .status(httpStatus.OK.code)
-            .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, `Blog update fail`, data));
+            .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, `Podcast update fail`, data));
         }
       })
       .catch((_err) => {
@@ -202,7 +203,7 @@ export const updateBlog = (req: Request, res: Response) => {
             new ResponseController(
               httpStatus.NOT_FOUND.code,
               httpStatus.NOT_FOUND.status,
-              `Blog by id ${req.params.id} was not found`,
+              `Podcast by id ${req.params.id} was not found`,
               _err
             )
           );
@@ -210,12 +211,12 @@ export const updateBlog = (req: Request, res: Response) => {
   }
 };
 
-export const deleteBlog = async (req: Request, res: Response) => {
+export const deletePodcast = async (req: Request, res: Response) => {
   const result = await deleteUrlObject(req.params.id);
   if (result.status) {
     return res
       .status(httpStatus.OK.code)
-      .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Blog deleted"));
+      .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Podcast deleted"));
   } else {
     return res
       .status(httpStatus.NOT_FOUND.code)
@@ -223,7 +224,8 @@ export const deleteBlog = async (req: Request, res: Response) => {
         new ResponseController(
           httpStatus.NOT_FOUND.code,
           httpStatus.NOT_FOUND.status,
-          `Blog by id ${req.params.id} was not found`
+          `Podcast by id ${req.params.id} was not found`,
+          result
         )
       );
   }

@@ -3,4 +3,5 @@ dist
 coverage
 src/__tests__
 jest.config.js
-panel
+src/tsconfig-paths.js
+src/db/config/config.js

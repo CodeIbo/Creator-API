@@ -1,44 +1,28 @@
-import { type blogPostObject, type updateBlogPostObject } from "@src/models/blog.model";
+import Blogs, { type BlogUpdateAttributes, type BlogCreationAttributes } from "@db/models/Blogs.model";
+import { keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
+import { isNewUrlObject, isUpdateUrlObject } from "./url_guard";
+import { type UrlsUpdateAttributes, type UrlsCreationAttributes } from "@db/models/Urls.model";
 
-const verifyBlogKeys = (unkownObject: Record<string, any>) => {
-  return _.keys(unkownObject).every(
-    (key) =>
-      key === "post_name" ||
-      key === "post_content" ||
-      key === "meta_data_title" ||
-      key === "meta_data_description" ||
-      key === "post_url" ||
-      key === "post_author" ||
-      key === "post_tags" ||
-      key === "publication_date"
-  );
+const verifyBlogKeys = (unkownObject: Record<string, any>, isNew: boolean) => {
+  const blogKeys = keysFilter(Blogs, ["blog_title", "blog_key"]);
+  if (isNew) {
+    return blogKeys.every((key) => {
+      return Object.prototype.hasOwnProperty.call(unkownObject, key);
+    });
+  } else {
+    return blogKeys.some((key) => {
+      return Object.prototype.hasOwnProperty.call(unkownObject, key);
+    });
+  }
 };
 
-export function isNewBlogObject(obj: Record<string, any>): obj is blogPostObject {
-  return (
-    _.isString(obj.post_name) &&
-    _.isString(obj.post_content) &&
-    _.isString(obj.meta_data_title) &&
-    _.isString(obj.meta_data_description) &&
-    _.isString(obj.post_url) &&
-    _.isString(obj.post_author) &&
-    _.isArray(obj.post_tags) &&
-    _.isDate(new Date(obj.publication_date)) &&
-    verifyBlogKeys(obj)
-  );
+export function isNewBlogObject(obj: Record<string, any>): obj is BlogCreationAttributes & UrlsCreationAttributes {
+  return verifyBlogKeys(obj, true) && _.isString(obj.blog_title) && _.isString(obj.blog_key) && isNewUrlObject(obj);
 }
 
-export function isUpdateBlogObject(obj: any): obj is updateBlogPostObject {
+export function isUpdateBlogObject(obj: any): obj is BlogUpdateAttributes & UrlsUpdateAttributes {
   return (
-    (_.isString(obj.post_name) ||
-      _.isString(obj.post_content) ||
-      _.isString(obj.meta_data_title) ||
-      _.isString(obj.meta_data_description) ||
-      _.isString(obj.post_url) ||
-      _.isString(obj.post_author) ||
-      _.isArray(obj.post_tags) ||
-      _.isDate(new Date(obj.publication_date))) &&
-    verifyBlogKeys(obj)
+    isUpdateUrlObject(obj) || (verifyBlogKeys(obj, false) && (_.isString(obj.blog_title) || _.isString(obj.blog_key)))
   );
 }

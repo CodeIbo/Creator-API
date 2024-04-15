@@ -1,4 +1,8 @@
-import { type userPostObject, type updateUserObject, type userLoginObject } from "@models/user.model";
+import {
+  type UserCreationAttributes,
+  type userLoginAttributes,
+  type userUpdateAttributes,
+} from "@db/models/Users.model";
 import _ from "lodash";
 
 const verifyUserKeys = (unkownObject: Record<string, any>) => {
@@ -7,7 +11,7 @@ const verifyUserKeys = (unkownObject: Record<string, any>) => {
   );
 };
 
-export function isNewUserObject(obj: Record<string, any>): obj is userPostObject {
+export function isNewUserObject(obj: Record<string, any>): obj is UserCreationAttributes {
   return (
     _.isString(obj.nick_name) &&
     _.isString(obj.email) &&
@@ -17,7 +21,7 @@ export function isNewUserObject(obj: Record<string, any>): obj is userPostObject
   );
 }
 
-export function isUpdateUserObject(obj: Record<string, any>): obj is updateUserObject {
+export function isUpdateUserObject(obj: Record<string, any>): obj is userUpdateAttributes {
   return (
     (_.isString(obj.nick_name) ||
       _.isString(obj.email) ||
@@ -27,6 +31,6 @@ export function isUpdateUserObject(obj: Record<string, any>): obj is updateUserO
   );
 }
 
-export function isLoginUserObject(obj: Record<string, any>): obj is userLoginObject {
+export function isLoginUserObject(obj: Record<string, any>): obj is userLoginAttributes {
   return _.isString(obj.email) && _.isString(obj.user_password) && verifyUserKeys(obj);
 }

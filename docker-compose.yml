@@ -5,17 +5,16 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
     volumes:
-      - ./db/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - sqldb_data:/var/lib/mysql
     ports:
-      - ${DB_PORT}:3306
-    expose:
-      - 3306
+      - ${DB_EXTERNAL_PORT}:${DB_INTERNAL_PORT}
     environment:
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      SERVICE_TAGS: prod
+      SERVICE_TAGS: ${NODE_ENV}
       SERVICE_NAME: sqldb
     networks:
       - internalnet
@@ -27,20 +26,12 @@ services:
     build: .
     volumes:
       - .:/usr/code
+      - node_api_volume:/var/lib/node_server
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     expose:
       - ${SERVER_PORT}
-    environment:
-      DB_HOST: sqldb
-      DB_PORT: ${DB_PORT}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      DB_CONNECTION_LIMIT: ${DB_CONNECTION_LIMIT}
-      SERVICE_TAGS: prod
-      SERVICE_NAME: nodeappservice
-      SERVER_PORT: ${SERVER_PORT}
+
     depends_on:
       - sqldb
     networks:
@@ -49,3 +40,7 @@ services:
 networks:
   internalnet:
     driver: bridge
+
+volumes:
+  sqldb_data:
+  node_api_volume:
