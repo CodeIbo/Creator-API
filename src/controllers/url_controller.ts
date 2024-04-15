@@ -1,7 +1,12 @@
+import httpStatus from "@db/http_status";
 import Urls, { type pageCategory } from "@db/models/Urls.model";
 import { isNewUrlObject, isUpdateUrlObject } from "@src/guards/url_guard";
 import { keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
+import ResponseController from "./response_controller";
+import { type Response, type Request } from "express";
+
+// helpers
 
 export const getUrlsByCategory = async (category: pageCategory) => {
   const urls = await Urls.findAll({
@@ -9,6 +14,14 @@ export const getUrlsByCategory = async (category: pageCategory) => {
       page_category: category,
     },
   });
+  return {
+    status: urls.length >= 0,
+    data: urls,
+  };
+};
+
+export const getUrls = async () => {
+  const urls = await Urls.findAll();
   return {
     status: urls.length >= 0,
     data: urls,
@@ -93,4 +106,20 @@ export const deleteUrlObject = async (urlId: string) => {
     status: typeof affectedRows === "number" && affectedRows > 0,
     err: typeof affectedRows === "number" && affectedRows > 0 ? null : "Delete failed",
   };
+};
+
+// endpoints
+
+export const endpointGetUrls = async (req: Request, res: Response): Promise<void> => {
+  getUrls()
+    .then((data) => {
+      return res
+        .status(httpStatus.OK.code)
+        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Urls", data));
+    })
+    .catch((err) => {
+      return res
+        .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, err));
+    });
 };

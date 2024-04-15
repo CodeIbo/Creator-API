@@ -5,7 +5,7 @@ import ResponseController from "./response_controller";
 import { comparePassword } from "./password_controller";
 import jwt from "jsonwebtoken";
 import _ from "lodash";
-import type JwtPayload from "@src/models/jwt.model";
+import type JwtPayload from "@models/jwt.model";
 import Users from "@db/models/Users.model";
 
 const login = async (req: Request, res: Response) => {
@@ -125,7 +125,7 @@ const refreshJWTToken = (req: Request, res: Response) => {
             .send(new ResponseController(httpStatus.FORBIDDEN.code, httpStatus.FORBIDDEN.status, "Forbidden"));
         }
         const accessToken = jwt.sign({ email: selectedUser.email }, process.env.ACCESS_TOKEN_SECRET as string, {
-          expiresIn: "30s",
+          expiresIn: "5m",
         });
         return res
           .status(httpStatus.OK.code)

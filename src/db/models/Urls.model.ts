@@ -3,6 +3,7 @@ import Pages from "./Pages.model";
 import Podcasts from "./Podcasts.model";
 import Blogs from "./Blogs.model";
 import type Meta from "@src/models/meta.model";
+import Menu from "./Menu.model";
 
 export type pageCategory = "custom-page" | "blog" | "article" | "podcast" | "episode";
 
@@ -70,13 +71,16 @@ class Urls extends Model<UrlsAttributes, UrlsCreationAttributes> {
   declare created_at: Date;
 
   @HasOne(() => Pages, { foreignKey: { name: "id" }, onDelete: "CASCADE" })
-  declare random: Pages;
+  declare pageKey: Pages;
 
   @HasOne(() => Blogs, { foreignKey: { name: "id" }, onDelete: "CASCADE" })
-  declare randomx: Blogs;
+  declare blogKey: Blogs;
 
   @HasOne(() => Podcasts, { foreignKey: { name: "id" }, onDelete: "CASCADE" })
-  declare randoms: Podcasts;
+  declare podcastKey: Podcasts;
+
+  @HasOne(() => Menu, { foreignKey: { name: "url_id" }, onDelete: "CASCADE" })
+  declare MenuKey: Menu;
 }
 
 export default Urls;

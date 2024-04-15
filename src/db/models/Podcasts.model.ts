@@ -15,7 +15,7 @@ export type PodcastUpdateAttributes = Partial<Omit<PodcastCreationAttributes, "i
   tableName: "podcasts",
   modelName: "Podcasts",
 })
-class Podcasts extends Model {
+class Podcasts extends Model<PodcastAttributes, PodcastCreationAttributes> {
   @Column({
     primaryKey: true,
     type: DataType.UUID,

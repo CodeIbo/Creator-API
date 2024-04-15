@@ -144,7 +144,7 @@ export const createBlog = (req: Request, res: Response): void => {
 export const updateBlog = (req: Request, res: Response) => {
   const updateBlogObj = req.body;
   if (!isUpdateBlogObject(updateBlogObj)) {
-    res
+    return res
       .status(httpStatus.INTERNAL_SERVER_ERROR.code)
       .send(
         new ResponseController(
