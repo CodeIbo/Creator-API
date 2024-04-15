@@ -135,3 +135,31 @@ CREATE TABLE IF NOT EXISTS coredb.episodes (
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
+
+-- -----------------------------------------------------
+-- Table images
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS coredb.images (
+  id CHAR(36) NOT NULL DEFAULT (UUID()),
+  original_name VARCHAR(36) NOT NULL,
+  file_name VARCHAR(255) NOT NULL,
+  file_path VARCHAR(255) NOT NULL,
+  mine_type VARCHAR(255) NOT NULL,
+  size VARCHAR(255) NULL,
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,
+  UNIQUE INDEX file_name_UNIQUE (file_name ASC) VISIBLE );
+
+-- -----------------------------------------------------
+-- Table menu
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS coredb.menu (
+  id CHAR(36) NOT NULL DEFAULT (UUID()),
+  url_id VARCHAR(36) NOT NULL,
+  menu_order VARCHAR(255) NOT NULL,
+  label VARCHAR(255) NOT NULL,
+  parent_id VARCHAR(255),
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE);
