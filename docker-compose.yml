@@ -1,40 +1,46 @@
-version: '3'
-
 services:
-  blog_api:
-    image: blog:base
-    tty: true
-    stdin_open: true
-    working_dir: /home/blog/BlogApi
-    container_name: blog_api
-    env_file:
-      - .env
-    ports:
-      - "${PORT_API}:${PORT_API}" 
+  sqldb:
+    image: mysql:8.0.33
+    container_name: sqldb-container
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
     volumes:
-      - /home/blog_project/BlogApi:/home/blog/BlogApi
-  blog_panel:
-    image: blog:base
-    tty: true
-    stdin_open: true
-    working_dir: /home/blog/BlogPanel
-    container_name: blog_panel   
-    env_file:
-      - .env
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - sqldb_data:/var/lib/mysql
     ports:
-      - "${PORT_PANEL}:${PORT_PANEL}" 
-    volumes:
-      - /home/blog_project/BlogPanel:/home/blog/BlogPanel
-  blog_frontend:
-    image: blog:base
-    tty: true
-    stdin_open: true
-    working_dir: /home/blog/BlogFrontEnd
-    container_name: blog_frontend
-    env_file:
-      - .env
-    ports:
-      - "${PORT_FRONT}:${PORT_FRONT}" 
-    volumes:
-      - /home/blog_project/BlogFrontEnd:/home/blog/BlogFrontEnd
+      - ${DB_EXTERNAL_PORT}:${DB_INTERNAL_PORT}
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      SERVICE_TAGS: ${NODE_ENV}
+      SERVICE_NAME: sqldb
+    networks:
+      - internalnet
 
+  node-server:
+    container_name: node-server-container
+    tty: true
+    stdin_open: true
+    build: .
+    volumes:
+      - .:/usr/code
+      - node_api_volume:/var/lib/node_server
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
+    expose:
+      - ${SERVER_PORT}
+
+    depends_on:
+      - sqldb
+    networks:
+      - internalnet
+
+networks:
+  internalnet:
+    driver: bridge
+
+volumes:
+  sqldb_data:
+  node_api_volume:
