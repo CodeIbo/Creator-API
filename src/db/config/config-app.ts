@@ -8,7 +8,7 @@ export const development = {
   host: process.env.DB_HOST,
   port: Number(process.env.DB_EXTERNAL_PORT),
   dialect: "mysql" as Dialect,
-  database: process.env.DB_HOST,
+  database: process.env.DB_NAME,
   pool: {
     max: Number(process.env.DB_CONNECTION_LIMIT),
     min: 0,
@@ -22,7 +22,7 @@ export const test = {
   host: process.env.DB_HOST,
   port: Number(process.env.DB_EXTERNAL_PORT),
   dialect: "mysql" as Dialect,
-  database: process.env.DB_HOST,
+  database: process.env.DB_NAME,
   pool: {
     max: Number(process.env.DB_CONNECTION_LIMIT),
     min: 0,
@@ -35,7 +35,7 @@ export const production = {
   host: process.env.DB_HOST,
   port: Number(process.env.DB_EXTERNAL_PORT),
   dialect: "mysql" as Dialect,
-  database: process.env.DB_HOST,
+  database: process.env.DB_NAME,
   pool: {
     max: Number(process.env.DB_CONNECTION_LIMIT),
     min: 0,

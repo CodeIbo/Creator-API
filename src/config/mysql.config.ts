@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize-typescript";
-import { development, test, production } from "@db/config/config";
+import { development, test, production } from "@db/config/config-app";
 import { appState } from "@src/helpers/appState.helper";
 
 dotenv.config();
