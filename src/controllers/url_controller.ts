@@ -115,7 +115,7 @@ export const endpointGetUrls = async (req: Request, res: Response): Promise<void
     .then((data) => {
       return res
         .status(httpStatus.OK.code)
-        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Urls", data));
+        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Urls", data.data));
     })
     .catch((err) => {
       return res

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-require("ts-node/register");
 require("dotenv").config();
-
+if (process.env.NODE_ENV === "development") require("ts-node/register");
 const config = require(`./config-app.${process.env.NODE_ENV === "development" ? "ts" : "js"}`);
 
 const development = {
