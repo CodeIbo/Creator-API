@@ -36,7 +36,7 @@ Authorization for modifications, additions, and deletions is managed through tok
 ### Step by Step
 
 1. Clone the repository: &nbsp; `git clone [repository-url]`
-2. Create file **.env** based on **env.example** and fill all positions ( :heavy_exclamation_mark: Its important). If you don't have install [Docker Engine](https://docs.docker.com/get-docker/)
+2. Create file **.env** based on **env.example** and fill all positions (:heavy_exclamation_mark:Important). If you don't have install [Docker Engine](https://docs.docker.com/get-docker/)
 3. Create containers based on docker-compose.yml:&nbsp; `docker compose up`
 4. Attach shell to container **blogapi-node-server**:&nbsp; `docker exec -it `
 5. Install dependencies
@@ -45,4 +45,4 @@ Authorization for modifications, additions, and deletions is managed through tok
 
 Now you can work on development enviroment, server is autorefreshing always when detect changes in files.
 
-:heavyxclamationmark: **WARNING** sometimes after first time instalation packages you will get error ( _error:something went wrong installing the "sharp" module cannot find module_ ). Just use command : `npm rebuild --verbose sharp` . More information about this issue, you can find [there](https://github.com/gatsbyjs/gatsby/issues/24559)
+:heavy_exclamation_mark:**WARNING** sometimes after first time instalation packages you will get error (_error:something went wrong installing the "sharp" module cannot find module_). Just use command: `npm rebuild --verbose sharp` . More information about this issue, you can find [there](https://github.com/gatsbyjs/gatsby/issues/24559)
