@@ -30,6 +30,38 @@ export const getArticlesByKey = async (req: Request, res: Response) => {
   }
 };
 
+export const getArticleByQuery = async (req: Request, res: Response) => {
+  const queryParams = req.query;
+  const keys = Object.keys(queryParams);
+  if (keys.length === 0) {
+    return res
+      .status(httpStatus.BAD_REQUEST.code)
+      .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Error Query Params"));
+  } else {
+    const firstKey = Object.keys(Articles.getAttributes()).find((v) => v === keys[0]);
+    if (!firstKey) {
+      return res
+        .status(httpStatus.BAD_REQUEST.code)
+        .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Error Query Params"));
+    }
+    Articles.findOne({
+      where: {
+        [firstKey]: queryParams[firstKey],
+      },
+    })
+      .then((data) => {
+        return res
+          .status(httpStatus.OK.code)
+          .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Founded Articles", data));
+      })
+      .catch((err) => {
+        return res
+          .status(httpStatus.BAD_REQUEST.code)
+          .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "Error", err));
+      });
+  }
+};
+
 export const getArticle = async (req: Request, res: Response) => {
   const id = req.params.id;
   await Articles.findOne({
