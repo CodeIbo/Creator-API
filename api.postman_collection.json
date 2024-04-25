@@ -1,0 +1,837 @@
+{
+	"info": {
+		"_postman_id": "2dd77dd6-786d-4226-a4a2-9ad7cd1d679d",
+		"name": "Api Core",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "20531391"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Add User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nickname\": \"Dave\",\r\n    \"email\": \"tester@gmail.com\",\r\n    \"user_password\": \"55555\",\r\n    \"access_lvl\": \"editor\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/users"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/users"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nick_name\": \"TESTER\",\r\n    \"email\": \"tester@tester.com\",\r\n    \"user_password\": \"1234\",\r\n    \"access_lvl\": \"v1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/users/a5eae453-cdd3-4214-9fab-bf20eb3daaae"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:5000/users/c18cc66d-289f-11ee-94d7-0242c0a81002?=",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"c18cc66d-289f-11ee-94d7-0242c0a81002"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pages",
+			"item": [
+				{
+					"name": "Get Pages",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": ""
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/pages"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Page",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Test Page nr 2\",\r\n    \"page_content\": \"<h2>Test Page</h2>\",\r\n    \"meta_data_title\": \"Test title\",\r\n    \"meta_data_description\": \"Test Description\",\r\n    \"url\": \"/bro-link\",\r\n    \"page_category\": \"custom-page\",\r\n    \"keywords\": \"abc,test,bro\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/pages"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Page",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"page_name\": \"Updated Page\",\r\n    \"page_content\": \"<h2>This is content where you can test ability</h2><span>777</span>\",\r\n    \"meta_data_title\": \"Updated Page title\",\r\n    \"meta_data_description\": \"Updated Page Description\",\r\n    \"page_url\": \"/new-updated-page\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/pages/f0c5a931-28d9-11ee-adc3-0242c0a81002"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Page",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/pages/f0c5a931-28d9-11ee-adc3-0242c0a81002?",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"pages",
+								"f0c5a931-28d9-11ee-adc3-0242c0a81002"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();",
+									"pm.environment.set(\"jwt_token\",response.data.token)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "email",
+								"value": "owner@test.com",
+								"type": "text"
+							},
+							{
+								"key": "user_password",
+								"value": "1234",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"pm.environment.set(\"jwt_token\",response.token)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im93bmVyQHRlc3QuY29tIiwiaWF0IjoxNjkxMDk0MDI5LCJleHAiOjE2OTEwOTQwNTl9.Rgl2WRCVRJTxqVc-ekzuqQAPpzpcwdJvBYqGTHN5A8k"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/auth/refresh"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Blog",
+			"item": [
+				{
+					"name": "Blog",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/blog/"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Blog",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"blog_title\": \"Life Style blog!\",\r\n    \"blog_key\": \"life-style\",\r\n    \"url\": \"/life-style\",\r\n    \"page_category\": \"blog\",\r\n    \"name\": \"LifeStyle my life\",\r\n    \"meta_data_title\": \"Life is style\",\r\n    \"meta_data_description\": \"life is style descritpion\",\r\n    \"keywords\": \"life, style, who cares\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/blog"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Blog",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"keywords\": \"life, style\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/blog/aea4e2fe-f40a-40c3-ba2c-89902f38ea8c"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Blog",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/blog/fdc5c37a-738c-11ee-a115-0242ac1f0002"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Articles",
+			"item": [
+				{
+					"name": "Get Articles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/article?blog_key=test-xw",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"article"
+							],
+							"query": [
+								{
+									"key": "blog_key",
+									"value": "test-xw"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Article By Query",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/article?url=boring-blog",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"article"
+							],
+							"query": [
+								{
+									"key": "url",
+									"value": "boring-blog"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Article",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"blog_key\": \"life-style\",\r\n    \"url\": \"/pacient-number-one\",\r\n    \"author\": \"Dr Dolittle\",\r\n    \"article_title\": \"New medicine is extra!\",\r\n    \"lead\": \"In the heart of bustling New York City, Dr. John Dolittle, a once-celebrated veterinarian whose ability to speak with animals made him a legend, finds himself forgotten in a world where technology overshadows magic.\",\r\n    \"post_tags\": [\"dr\",\"dolittle\"],\r\n    \"article_content\": \"<p>This article is amazing</p><h1>TEST H1</h1>\",\r\n    \"photo_url\": \"\",\r\n    \"date\": \"2021-12-12\",\r\n    \"meta_data_title\": \"New dr Dolittle !\",\r\n    \"meta_data_description\": \"New dr Dolittle Description !\",\r\n    \"keywords\": \"dr,dolittle,new\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/article"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Article",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"author\": \"Dolittle\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/article/cfc95e73-5c3b-4c59-b102-a9f3cb87389b"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Articles",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/article/c0c314cd-73ac-4196-8794-ea67c5f310b1"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Podcast",
+			"item": [
+				{
+					"name": "Get Podcast",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/podcast"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Podcast",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"podcast_title\": \"Podcast with amazing people!\",\r\n    \"podcast_key\": \"for-real\",\r\n    \"url\": \"/where-we-are\",\r\n    \"page_category\": \"podcast\",\r\n    \"name\": \"Who is this?\",\r\n    \"meta_data_title\": \"Title Podcast with amazing people!\",\r\n    \"meta_data_description\": \"Description Podcast with amazing people!\",\r\n    \"keywords\": \"this, is , keywords\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/podcast"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Podcast",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"meta_data_title\": \"Lets talk about people\",\r\n    \"podcast_title\": \"Lets talk about people!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/podcast/b173d8ed-13b1-49d8-a555-0b12719ea29f"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Podcast",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/podcast/d7330684-c2a5-4df5-a79f-e2f27d8aabc7"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Episodes",
+			"item": [
+				{
+					"name": "Get Episodes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5000/episode?podcast_key=hi-hi-podcast",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"episode"
+							],
+							"query": [
+								{
+									"key": "podcast_key",
+									"value": "hi-hi-podcast"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Episode",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"podcast_key\": \"for-real\",\r\n    \"url\": \"/this-is-real-talk\",\r\n    \"author\": \"Mr. Robot\",\r\n    \"episode_title\": \"Cybersecurity is important!\",\r\n    \"episode_tags\": [\"cybersecurity\",\"important\",\"robot\"],\r\n    \"episode_content\": \"<p>Mr robot talking about cybersecurity!</p><h1>EVERYONE SHOCKED</h1>\",\r\n    \"photo_url\": \"\",\r\n    \"announcement_url\": \"\",\r\n    \"date\": \"2003-10-12\",\r\n    \"meta_data_title\": \"ABC!\",\r\n    \"meta_data_description\": \"ABC D!\",\r\n    \"keywords\": \"a,b,c,d\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/episode"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Episode",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"author\": \"Mr Nobody\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/episode/13f62701-df2e-419b-84bb-56adedbe591e"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Episode",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/episode/0cb65566-0965-4044-b43f-34afe64a4ae9"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Image",
+			"item": [
+				{
+					"name": "Add Image",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": "http://localhost:5000/image"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Image",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/image/ecc15e32-0b39-47f4-a75b-79346f26c17a"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Image",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/image"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Menu",
+			"item": [
+				{
+					"name": "Get menu items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:5000/menu/"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Menu Item",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"url_id\": \"b11732ca-0955-41c6-9a74-244e9f5eb289\",\r\n        \"menu_order\": 25,\r\n        \"label\": \"Menu Item 3\",\r\n        \"parent_id\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/menu/00b23908-132f-42b4-b682-21571a655abc"
+					},
+					"response": []
+				},
+				{
+					"name": "Sort Menu Items",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"menuItems\": [\r\n        {\r\n            \"id\": \"564gdf435-fa9b-4513-8623-543645fgsd\",\r\n            \"menu_order\": 3\r\n        },\r\n                {\r\n            \"id\": \"13f62701-df2e-419b-84bb-56adedbe591e\",\r\n            \"menu_order\": 1\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/menu/sort"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Menu Item",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"menu_order\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/menu/73f7f6bd-fa9b-4513-8623-316134e1f9a7"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Menu Item",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": "http://localhost:5000/menu/00b23908-132f-42b4-b682-21571a655abc"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

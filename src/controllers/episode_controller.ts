@@ -94,7 +94,7 @@ export const updateEpisode = async (req: Request, res: Response) => {
   const id = req.params.id;
 
   if (!isUpdateEpisodeObject(updateEpisodeObject)) {
-    res
+    return res
       .status(httpStatus.INTERNAL_SERVER_ERROR.code)
       .send(
         new ResponseController(

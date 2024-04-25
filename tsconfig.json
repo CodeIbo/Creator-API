@@ -50,5 +50,6 @@
     ".env",
     "src/db/init.sql",
     "__tests__",
+    "api.postman_collection.json"
   ]
 }
