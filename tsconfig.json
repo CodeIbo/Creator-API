@@ -44,12 +44,13 @@
   "include": [
     "src",
     "package.json",
+    "jest.config.js",
+    ".eslintrc.js"
   ],
   "exclude": [
     "node_modules",
     ".env",
     "src/db/init.sql",
-    "__tests__",
     "api.postman_collection.json"
   ]
 }

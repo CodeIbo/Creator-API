@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 require("dotenv").config();
-if (process.env.NODE_ENV === "development") require("ts-node/register");
-const config = require(`./config-app.${process.env.NODE_ENV === "development" ? "ts" : "js"}`);
+if (process.env.NODE_ENV === ("development" || "test")) require("ts-node/register");
+const config = require(`./config-app.${process.env.NODE_ENV === ("development" || "test") ? "ts" : "js"}`);
 
 const development = {
   username: process.env.DB_USER,

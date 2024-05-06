@@ -30,6 +30,7 @@ export const test = {
     idle: 10000,
   },
   models: [path.join(__dirname, "../models/*.model.ts")],
+  storage: ":memory:",
 };
 export const production = {
   host: process.env.DB_HOST,

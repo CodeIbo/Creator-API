@@ -49,3 +49,5 @@ app.use("/url", urlRoutes);
 app.listen(Number(process.env.SERVER_PORT) ?? 6666, () => {
   console.log(`App start at port ${process.env.SERVER_PORT ?? "6666"}`);
 });
+
+export default app;
