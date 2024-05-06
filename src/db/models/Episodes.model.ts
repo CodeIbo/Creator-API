@@ -1,4 +1,4 @@
-import type Meta from "@src/models/meta.model";
+import type Meta from "@models/meta.model";
 import { Table, Column, Model, DataType } from "sequelize-typescript";
 
 interface EpisodeAttributes extends Meta {

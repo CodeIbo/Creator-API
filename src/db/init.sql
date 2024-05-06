@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS coredb.pages (
   page_type VARCHAR(45) NULL,
   PRIMARY KEY (id),
   UNIQUE INDEX url_id_UNIQUE (id ASC) VISIBLE,
-  CONSTRAINT url_id
+  CONSTRAINT page_url
     FOREIGN KEY (id)
     REFERENCES urls (ID)
     ON DELETE CASCADE
@@ -168,3 +168,20 @@ CREATE TABLE IF NOT EXISTS coredb.menu (
     REFERENCES urls (ID)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
+
+
+-- -----------------------------------------------------
+-- Table social_media
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS coredb.social_media (
+  id CHAR(36) NOT NULL DEFAULT (UUID()),
+  `name` VARCHAR(255) NOT NULL,
+  available TINYINT(1) NOT NULL DEFAULT 0,
+  link VARCHAR(255) DEFAULT NULL,
+  title VARCHAR(255) DEFAULT NULL,
+  icon VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,
+  UNIQUE INDEX icon_UNIQUE (icon ASC) VISIBLE);
