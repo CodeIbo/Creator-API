@@ -1,23 +1,27 @@
-import { type timeStamp } from "@src/models/timestamp.model";
-import { Table, Column, Model, DataType, AllowNull } from "sequelize-typescript";
+import { type timeStamp } from "@models/timestamp.model";
+import { Table, Column, Model, DataType, AllowNull, UpdatedAt, CreatedAt } from "sequelize-typescript";
 
 export interface SocialMediaAttributes extends timeStamp {
-  id: string;
-  name: string;
+  readonly id: string;
+  readonly name: string;
+  order: number;
   available: 0 | 1;
   link: string | null;
   title: string | null;
-  icon: string;
-  created_at?: string | null;
-  updated_at?: string | null;
+  readonly icon: string;
+}
+export interface SocialMediaSortAtributes {
+  id: string;
+  order: number;
+  [key: string]: any;
 }
 
-export type SocialMediaCreationAttributes = Omit<SocialMediaAttributes, "id" | "created_at" | "updated_at">;
+export type SocialMediaCreationAttributes = SocialMediaAttributes;
 
 export type SocialMediaUpdateAttributes = Partial<SocialMediaCreationAttributes>;
 
 @Table({
-  timestamps: true,
+  timestamps: false,
   tableName: "social_media",
   modelName: "SocialMedia",
 })
@@ -44,6 +48,11 @@ export default class SocialMedia extends Model<SocialMediaCreationAttributes, So
   declare available: number;
 
   @Column({
+    type: DataType.NUMBER,
+  })
+  declare order: number;
+
+  @Column({
     type: DataType.STRING,
   })
   declare link: string;
@@ -58,4 +67,18 @@ export default class SocialMedia extends Model<SocialMediaCreationAttributes, So
     type: DataType.STRING,
   })
   declare icon: string;
+
+  @CreatedAt
+  @Column({
+    type: DataType.DATE,
+    field: "created_at",
+  })
+  declare created_at: Date;
+
+  @UpdatedAt
+  @Column({
+    type: DataType.DATE,
+    field: "updated_at",
+  })
+  declare updated_at: Date;
 }
