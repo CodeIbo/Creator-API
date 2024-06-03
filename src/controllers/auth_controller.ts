@@ -65,7 +65,7 @@ const login = async (req: Request, res: Response) => {
               );
           }
           const accessToken = jwt.sign({ email: user.email }, process.env.ACCESS_TOKEN_SECRET as string, {
-            expiresIn: "5m",
+            expiresIn: "15m",
           });
           const refreshToken = jwt.sign({ email: user.email }, process.env.REFRESH_TOKEN_SECRET as string, {
             expiresIn: "1d",
@@ -80,7 +80,9 @@ const login = async (req: Request, res: Response) => {
           });
           const responseAccessToken = res.status(httpStatus.OK.code).send(
             new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "New Token Received", {
-              email: userLog.email,
+              email: user.email,
+              access_lvl: user.access_lvl,
+              nick_name: user.nick_name,
               token: accessToken,
             })
           );
@@ -112,7 +114,7 @@ const refreshJWTToken = (req: Request, res: Response) => {
       refresh_token: cookies.jwt,
     },
   })
-    .then((selectedUser) => {
+    .then(async (selectedUser) => {
       if (selectedUser === null) {
         res
           .status(httpStatus.FORBIDDEN.code)
@@ -125,7 +127,18 @@ const refreshJWTToken = (req: Request, res: Response) => {
             .send(new ResponseController(httpStatus.FORBIDDEN.code, httpStatus.FORBIDDEN.status, "Forbidden"));
         }
         const accessToken = jwt.sign({ email: selectedUser.email }, process.env.ACCESS_TOKEN_SECRET as string, {
-          expiresIn: "5m",
+          expiresIn: "30m",
+        });
+        const newRefreshToken = jwt.sign({ email: selectedUser.email }, process.env.REFRESH_TOKEN_SECRET as string, {
+          expiresIn: "1d",
+        });
+        selectedUser.refresh_token = newRefreshToken;
+        await selectedUser.save();
+        res.cookie("jwt", newRefreshToken, {
+          httpOnly: true,
+          sameSite: "none",
+          secure: true,
+          maxAge: 24 * 60 * 60 * 1000,
         });
         return res
           .status(httpStatus.OK.code)
@@ -137,4 +150,29 @@ const refreshJWTToken = (req: Request, res: Response) => {
     });
 };
 
-export { login, refreshJWTToken };
+const logout = (req: Request, res: Response) => {
+  const cookies = req.cookies;
+
+  Users.findOne({
+    where: {
+      refresh_token: cookies.jwt,
+    },
+  })
+    .then(async (selectedUser) => {
+      if (selectedUser === null) {
+        return res
+          .status(httpStatus.FORBIDDEN.code)
+          .send(new ResponseController(httpStatus.FORBIDDEN.code, httpStatus.FORBIDDEN.status, "Forbidden"));
+      }
+      selectedUser.refresh_token = null;
+      await selectedUser.save();
+      return res
+        .status(httpStatus.OK.code)
+        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "User logged out"));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export { login, refreshJWTToken, logout };
