@@ -6,6 +6,7 @@ interface MenuAttributes {
   menu_order: number;
   label: string;
   parent_id: string | null;
+  scroll_target: string | null;
   created_at: string;
 }
 
@@ -47,7 +48,7 @@ class Menu extends Model<MenuAttributes, MenuCreationAttributes> {
   declare url_id: string;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.NUMBER,
   })
   declare menu_order: number;
 
@@ -60,6 +61,11 @@ class Menu extends Model<MenuAttributes, MenuCreationAttributes> {
     type: DataType.STRING,
   })
   declare parent_id: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  declare scroll_target: string;
 
   @CreatedAt
   @Column({

@@ -19,7 +19,7 @@ module.exports = {
             references: { model: "urls", key: "id" },
           },
           menu_order: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.NUMBER,
             allowNull: false,
           },
           label: {
@@ -30,8 +30,8 @@ module.exports = {
             type: DataTypes.STRING,
           },
           created_at: {
-            type: DataTypes.DATE,
-            defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+            type: "DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) NOT NULL",
+            defaultValue: () => new Date(),
           },
         })
         .catch((err) => {
