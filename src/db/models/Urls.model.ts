@@ -5,7 +5,7 @@ import Blogs from "./Blogs.model";
 import type Meta from "@src/models/meta.model";
 import Menu from "./Menu.model";
 
-export type pageCategory = "custom-page" | "blog" | "article" | "podcast" | "episode";
+export type pageCategory = "page" | "blog" | "article" | "podcast" | "episode";
 
 export interface UrlsAttributes extends Meta {
   id: string;

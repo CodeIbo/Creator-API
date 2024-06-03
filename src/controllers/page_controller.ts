@@ -7,7 +7,7 @@ import { addNewUrl, deleteUrlObject, getUrlById, getUrlsByCategory, updateUrlObj
 import _ from "lodash";
 
 export const getPages = (_req: Request, res: Response): void => {
-  getUrlsByCategory("custom-page")
+  getUrlsByCategory("page")
     .then((data) => {
       if (data.status) {
         Pages.findAll()

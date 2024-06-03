@@ -1,4 +1,4 @@
 export interface timeStamp {
-  created_at?: string | null;
-  updated_at?: string | null;
+  readonly created_at?: string | null;
+  readonly updated_at?: string | null;
 }

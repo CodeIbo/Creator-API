@@ -6,7 +6,7 @@ export interface UserAttributes {
   nick_name: string;
   user_password: string;
   access_lvl: string;
-  refresh_token: string;
+  refresh_token: string | null;
   created_at: string;
 }
 
@@ -53,7 +53,7 @@ class Users extends Model<UserAttributes, UserCreationAttributes> {
   @Column({
     type: DataType.STRING,
   })
-  declare refresh_token: string;
+  declare refresh_token: string | null;
 
   @CreatedAt
   @Column({
