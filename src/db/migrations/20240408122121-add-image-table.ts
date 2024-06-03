@@ -1,4 +1,4 @@
-import { type QueryInterface, DataTypes, Sequelize } from "sequelize";
+import { type QueryInterface, DataTypes } from "sequelize";
 
 /** @type {import("sequelize-cli").Migration} */
 
@@ -34,8 +34,8 @@ module.exports = {
             type: DataTypes.INTEGER,
           },
           created_at: {
-            type: DataTypes.DATE,
-            defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+            type: "DATETIME(3) DEFAULT CURRENT_TIMESTAMP(3) NOT NULL",
+            defaultValue: () => new Date(),
           },
         })
         .catch((err) => {

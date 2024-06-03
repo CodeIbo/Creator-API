@@ -40,16 +40,16 @@ For efficient testing of API endpoints, I have prepared a Postman collection fil
 ### Step by Step
 
 1. Clone the repository:&nbsp; `git clone [repository-url]`
-2. Create file **.env** based on **env.example** and fill all positions. If you don't have install [Docker Engine](https://docs.docker.com/get-docker/ )
+2. Create file **.env** based on **env.example** and fill all positions. If you don't have install [Docker Engine](https://docs.docker.com/get-docker/)
 3. Create containers based on docker-compose.yml:&nbsp; `docker compose up`
 4. Attach shell to container **blogapi-node-server**:&nbsp; `docker exec -it `
 5. Install dependencies
-6. Execute commands:&nbsp; `npm run db-dev:seed` &nbsp; `npm run start:dev`
+6. Execute commands:&nbsp; `npx sequelize-cli db:migrate` &nbsp; `npx sequelize-cli db:seed:all` &nbsp; `npm run start:dev`
 7. Start Server:&nbsp; `npm run start:dev`
 
 Now you can work on development enviroment, server is autorefreshing always when detect changes in files.
 
-❗**WARNING** sometimes after first time instalation packages you will get error (*error:something went wrong installing the "sharp" module cannot find module*). Just use command: `npm rebuild --verbose sharp` . More information about this issue, you can find [there](https://github.com/gatsbyjs/gatsby/issues/24559)
+❗**WARNING** sometimes after first time instalation packages you will get error (_error:something went wrong installing the "sharp" module cannot find module_). Just use command: `npm rebuild --verbose sharp` . More information about this issue, you can find [there](https://github.com/gatsbyjs/gatsby/issues/24559)
 
 ### Importing the Collection into Postman
 
@@ -65,7 +65,7 @@ Now you can work on development enviroment, server is autorefreshing always when
 
 - [ ] **Spotify API Integration**: Develop a solution for integrating the Spotify API with the application. This includes combining Spotify data with data from the 'podcast' and 'episodes' tables to create a cohesive experience.
 
-- [ ] **Database Seeding Improvements**: Improve the seed:all command to ensure proper integration with Sequelize. This task focuses on enhancing data seeding processes to be more reliable and efficient.
+- [x] **Database Seeding Improvements**: Improve the seed:all command to ensure proper integration with Sequelize. This task focuses on enhancing data seeding processes to be more reliable and efficient.
 
 - [ ] **Webpack Configuration**: Set up and configure Webpack to optimize the bundling process. This will streamline the development and deployment of resources, enhancing performance and maintainability.
 
