@@ -74,7 +74,14 @@ class Episodes extends Model<EpisodeAttributes, EpisodeCreationAttributes> {
   declare date: Date;
 
   @Column({
-    type: DataType.JSON,
+    type: DataType.TEXT("long"),
+    get() {
+      const rawValue = this.getDataValue("episode_tags");
+      return rawValue ? JSON.parse(rawValue) : [];
+    },
+    set(value) {
+      this.setDataValue("episode_tags", JSON.stringify(value));
+    },
   })
   declare episode_tags: string[];
 

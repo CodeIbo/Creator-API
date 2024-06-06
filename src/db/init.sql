@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS coredb.articles (
   author VARCHAR(255) NULL,
   article_title TEXT NULL,
   `lead` TEXT NULL,
-  post_tags JSON NOT NULL DEFAULT (CAST('[]' AS JSON)),
+  post_tags TEXT NOT NULL DEFAULT (CAST('[]')),
   article_content TEXT NULL,
   photo_url VARCHAR(255) NULL,
   date DATE NULL,
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS coredb.episodes (
   photo_url VARCHAR(255) NULL,
   date DATE NULL,
   author VARCHAR(255) NULL,
-  episode_tags JSON NOT NULL DEFAULT (CAST('[]' AS JSON)),
+  episode_tags TEXT NOT NULL DEFAULT (CAST('[]')),
   podcast_key VARCHAR(36) NOT NULL,
   meta_data_title VARCHAR(255) NULL,
   meta_data_description VARCHAR(255) NULL,
@@ -185,3 +185,17 @@ CREATE TABLE IF NOT EXISTS coredb.social_media (
   PRIMARY KEY (id),
   UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,
   UNIQUE INDEX icon_UNIQUE (icon ASC) VISIBLE);
+
+CREATE TABLE IF NOT EXISTS coredb.settings (
+  id CHAR(36) NOT NULL DEFAULT (UUID()),
+  company_name VARCHAR(255) DEFAULT null,
+  logo VARCHAR(255) DEFAULT null,
+  logo_alt VARCHAR(255) DEFAULT NULL,
+  meta_data_title_global VARCHAR(255) DEFAULT NULL,
+  meta_data_description_global VARCHAR(255) DEFAULT NULL,
+  keywords_global VARCHAR(255) DEFAULT NULL,
+  meta_data_suffix_global VARCHAR(255) DEFAULT NULL,
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE);

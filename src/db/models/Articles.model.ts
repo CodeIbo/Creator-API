@@ -59,7 +59,14 @@ class Articles extends Model<ArticlesAttributes, ArticlesCreationAttributes> {
   declare lead: string;
 
   @Column({
-    type: DataType.JSON,
+    type: DataType.TEXT("long"),
+    get() {
+      const rawValue = this.getDataValue("post_tags");
+      return rawValue ? JSON.parse(rawValue) : [];
+    },
+    set(value) {
+      this.setDataValue("post_tags", JSON.stringify(value));
+    },
   })
   declare post_tags: string[];
 
