@@ -90,8 +90,7 @@ export const updateUrlObject = async (urlUpdateObject: any, urlId: string) => {
     }
   }
   return {
-    status: false,
-    err: "Data error",
+    status: true,
   };
 };
 

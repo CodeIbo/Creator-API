@@ -17,6 +17,7 @@ export function isNewArticleObject(obj: Record<string, any>): obj is ArticlesCre
     isValidDate(obj.date) &&
     _.isString(obj.meta_data_title) &&
     _.isString(obj.meta_data_description) &&
+    _.isString(obj.keywords) &&
     _.isString(obj.article_title) &&
     _.isString(obj.lead) &&
     _.isArray(obj.post_tags) &&
@@ -34,6 +35,7 @@ export function isUpdateArticleObject(obj: Record<string, any>): obj is Articles
     isValidDate(obj.date) ||
     _.isString(obj.meta_data_title) ||
     _.isString(obj.meta_data_description) ||
+    _.isString(obj.keywords) ||
     _.isString(obj.article_title) ||
     _.isString(obj.lead) ||
     (_.isArray(obj.post_tags) && obj.post_tags.every(_.isString))

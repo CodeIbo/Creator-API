@@ -132,7 +132,7 @@ export const createPage = (req: Request, res: Response): void => {
   }
 };
 
-export const updatePage = (req: Request, res: Response) => {
+export const updatePage = async (req: Request, res: Response) => {
   const updatePageObj = req.body;
   if (!isUpdatePageObject(updatePageObj)) {
     res
@@ -145,39 +145,38 @@ export const updatePage = (req: Request, res: Response) => {
         )
       );
   } else {
+    if (updatePageObj.page_content) {
+      await Pages.update({ page_content: updatePageObj.page_content }, { where: { id: req.params.id } }).catch(
+        (_err) => {
+          return res
+            .status(httpStatus.NOT_FOUND.code)
+            .send(
+              new ResponseController(
+                httpStatus.NOT_FOUND.code,
+                httpStatus.NOT_FOUND.status,
+                `Page by id ${req.params.id} was not found`,
+                _err
+              )
+            );
+        }
+      );
+    }
+
     updateUrlObject(updatePageObj, req.params.id)
       .then(async (data) => {
-        if (data?.status && data.data) {
-          if (updatePageObj.page_content) {
-            await Pages.update({ page_content: updatePageObj.page_content }, { where: { id: req.params.id } }).catch(
-              (_err) => {
-                return res
-                  .status(httpStatus.NOT_FOUND.code)
-                  .send(
-                    new ResponseController(
-                      httpStatus.NOT_FOUND.code,
-                      httpStatus.NOT_FOUND.status,
-                      `Page by id ${req.params.id} was not found`,
-                      _err
-                    )
-                  );
-              }
+        const updatedUrl = await getUrlById(req.params.id);
+        const updatedPage = await Pages.findOne({ where: { id: req.params.id } });
+        if (updatedUrl.data && updatedPage && data?.status) {
+          return res
+            .status(httpStatus.OK.code)
+            .send(
+              new ResponseController(
+                httpStatus.OK.code,
+                httpStatus.OK.status,
+                `Page Updated`,
+                _.defaults(updatedPage.get(), updatedUrl.data.get())
+              )
             );
-          }
-          const updatedUrl = await getUrlById(req.params.id);
-          const updatedPage = await Pages.findOne({ where: { id: req.params.id } });
-          if (updatedUrl.data && updatedUrl.status && updatedPage) {
-            return res
-              .status(httpStatus.OK.code)
-              .send(
-                new ResponseController(
-                  httpStatus.OK.code,
-                  httpStatus.OK.status,
-                  `Page Updated`,
-                  _.defaults(updatedPage.get(), updatedUrl.data.get())
-                )
-              );
-          }
         } else {
           return res
             .status(httpStatus.OK.code)

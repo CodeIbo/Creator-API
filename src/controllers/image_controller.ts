@@ -13,7 +13,8 @@ export const uploadImage = async (req: Request, res: Response) => {
       .status(httpStatus.BAD_REQUEST.code)
       .send(new ResponseController(httpStatus.BAD_REQUEST.code, httpStatus.BAD_REQUEST.status, "BAD_REQUEST"));
   }
-  if (path.extname(file.filename) !== ".svg") {
+  path.extname(file.filename);
+  if (path.extname(file.filename) !== ".svg" && path.extname(file.filename) !== ".webp") {
     const outputFilePath = file.path.replace(path.extname(file.filename), ".webp");
     await sharp(file.path)
       .resize()
@@ -30,7 +31,6 @@ export const uploadImage = async (req: Request, res: Response) => {
     file.path = outputFilePath;
     file.filename = path.basename(outputFilePath);
   }
-
   Images.create({
     file_name: file.filename,
     file_path: file.path,
@@ -44,6 +44,7 @@ export const uploadImage = async (req: Request, res: Response) => {
         .send(new ResponseController(httpStatus.CREATED.code, httpStatus.CREATED.status, "Created", newImage));
     })
     .catch((e) => {
+      console.log(e);
       return res
         .status(httpStatus.INTERNAL_SERVER_ERROR.code)
         .send(
