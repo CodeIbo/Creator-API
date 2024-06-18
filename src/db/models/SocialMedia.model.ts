@@ -1,5 +1,5 @@
 import { type timeStamp } from "@models/timestamp.model";
-import { Table, Column, Model, DataType, AllowNull, UpdatedAt, CreatedAt } from "sequelize-typescript";
+import { Table, Column, Model, DataType, UpdatedAt, CreatedAt } from "sequelize-typescript";
 
 export interface SocialMediaAttributes extends timeStamp {
   readonly id: string;
@@ -34,16 +34,16 @@ export default class SocialMedia extends Model<SocialMediaCreationAttributes, So
   })
   declare id: string;
 
-  @AllowNull(false)
   @Column({
     type: DataType.STRING,
+    allowNull: false,
   })
   declare name: string;
 
-  @AllowNull(false)
   @Column({
     type: DataType.TINYINT({ length: 1 }),
     defaultValue: 0,
+    allowNull: false,
   })
   declare available: number;
 
@@ -62,9 +62,9 @@ export default class SocialMedia extends Model<SocialMediaCreationAttributes, So
   })
   declare title: string;
 
-  @AllowNull(false)
   @Column({
     type: DataType.STRING,
+    allowNull: false,
   })
   declare icon: string;
 
