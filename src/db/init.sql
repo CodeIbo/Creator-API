@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS coredb.articles (
   author VARCHAR(255) NULL,
   article_title TEXT NULL,
   `lead` TEXT NULL,
-  post_tags TEXT NOT NULL DEFAULT '[]',
+  post_tags TEXT NOT NULL DEFAULT('[]'),
   article_content TEXT NULL,
   photo_url VARCHAR(255) NULL,
   date DATE NULL,
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS coredb.episodes (
   photo_url VARCHAR(255) NULL,
   date DATE NULL,
   author VARCHAR(255) NULL,
-  episode_tags TEXT NOT NULL DEFAULT '[]',
+  episode_tags TEXT NOT NULL DEFAULT('[]'),
   podcast_key VARCHAR(36) NOT NULL,
   meta_data_title VARCHAR(255) NULL,
   meta_data_description VARCHAR(255) NULL,
@@ -176,11 +176,11 @@ CREATE TABLE IF NOT EXISTS coredb.menu (
 CREATE TABLE IF NOT EXISTS coredb.social_media (
   id CHAR(36) NOT NULL DEFAULT (UUID()),
   `name` VARCHAR(255) NOT NULL,
-  available TINYINT(1) NOT NULL DEFAULT 0,
+  available TINYINT(1) NOT NULL DEFAULT(0),
   link VARCHAR(255) DEFAULT NULL,
   title VARCHAR(255) DEFAULT NULL,
   icon VARCHAR(255) NOT NULL,
-  order INT NOT NULL
+  `order` INT NOT NULL
   created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
@@ -192,11 +192,24 @@ CREATE TABLE IF NOT EXISTS coredb.settings (
   company_name VARCHAR(255) DEFAULT null,
   logo VARCHAR(255) DEFAULT null,
   logo_alt VARCHAR(255) DEFAULT NULL,
-  meta_data_title_global VARCHAR(255) DEFAULT NULL,
-  meta_data_description_global VARCHAR(255) DEFAULT NULL,
+  meta_data_title_global TEXT,
+  meta_data_description_global TEXT,
   keywords_global VARCHAR(255) DEFAULT NULL,
   meta_data_suffix_global VARCHAR(255) DEFAULT NULL,
   created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE);
+
+
+CREATE TABLE IF NOT EXISTS coredb.ui_settings (
+  id CHAR(36) NOT NULL DEFAULT (UUID()),
+  element_key VARCHAR(255) NOT NULL,
+  element_value: TEXT,
+  element_type: VARCHAR(255) NOT NULL,
+  element_css: TEXT,
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+
+)

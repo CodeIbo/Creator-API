@@ -15,6 +15,7 @@ import menuRoutes from "@routes/menu.route";
 import urlRoutes from "@routes/url.route";
 import socialMediaRoutes from "@routes/socialMedia.route";
 import settingsRoutes from "@routes/settings.route";
+import uiSettingsRoutes from "@routes/uiSettings.route";
 
 const accessURLS = [process.env.PANEL_URL, process.env.FRONT_END_URL].filter(Boolean) as string[] | [];
 
@@ -51,6 +52,8 @@ app.use("/url", urlRoutes);
 app.use("/social-media", socialMediaRoutes);
 
 app.use("/settings", settingsRoutes);
+
+app.use("/ui-settings", uiSettingsRoutes);
 
 app.listen(Number(process.env.SERVER_PORT) ?? 6666, () => {
   console.log(`App start at port ${process.env.SERVER_PORT ?? "6666"}`);
