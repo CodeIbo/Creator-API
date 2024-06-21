@@ -1,90 +1,56 @@
-import httpStatus from "@db/http_status";
-import ResponseController from "./response_controller";
 import { type Response, type Request } from "express";
-import { addNewUrl, deleteUrlObject, getUrlById, getUrlsByCategory, updateUrlObject } from "./url_controller";
-import Podcasts from "@db/models/Podcasts.model";
 import _ from "lodash";
-import { keysFilter } from "@src/helpers/key.helper";
-import { isNewPodcastObject, isUpdatePodcastObject } from "@src/guards/podcast_guard";
 
-export const getPodcasts = (_req: Request, res: Response): void => {
-  getUrlsByCategory("podcast")
-    .then((data) => {
-      if (data.status) {
-        Podcasts.findAll()
-          .then((podcast) => {
-            const updatedPodcasts = podcast.map((podcast) => {
-              const urlList = data.data.filter((url) => {
-                return url.id === podcast.id;
-              });
-              let updatedPodcast = podcast.get();
+import ResponseController from "./response_controller";
+import { addNewUrl, deleteUrlObject, getUrlById, updateUrlObject } from "./url_controller";
 
-              urlList.forEach((urlObj) => {
-                updatedPodcast = _.defaults(updatedPodcast, urlObj.get());
-              });
-              return updatedPodcast;
-            });
-            return res
-              .status(httpStatus.OK.code)
-              .send(
-                new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Podcasts", updatedPodcasts)
-              );
-          })
-          .catch((err) => {
-            return res
-              .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-              .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, err));
-          });
-      } else {
-        return res
-          .status(httpStatus.NOT_FOUND.code)
-          .send(
-            new ResponseController(
-              httpStatus.NOT_FOUND.code,
-              httpStatus.NOT_FOUND.status,
-              `Found ${data.data.length} items in podcast category`
-            )
-          );
-      }
-    })
-    .catch((err) => {
-      return res
-        .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, err));
-    });
+import httpStatus from "@db/http_status";
+import Podcasts from "@db/models/Podcasts.model";
+
+import { keysFilter } from "@helpers/key.helper";
+import { mergeArraysWithUrls, mergeObjectWithUrl } from "@helpers/contentMerger.helper";
+
+import { isNewPodcastObject, isUpdatePodcastObject } from "@guards/podcast_guard";
+
+export const getPodcasts = async (_req: Request, res: Response) => {
+  try {
+    const podcasts = await Podcasts.findAll();
+    const mergedPodcasts = await mergeArraysWithUrls<Podcasts>(podcasts, "podcast");
+
+    return res
+      .status(httpStatus.OK.code)
+      .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Podcasts", mergedPodcasts));
+  } catch (err) {
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+      .send(
+        new ResponseController(
+          httpStatus.INTERNAL_SERVER_ERROR.code,
+          httpStatus.INTERNAL_SERVER_ERROR.status,
+          "Internal server error",
+          err
+        )
+      );
+  }
 };
 
-export const getPodcast = (req: Request, res: Response): void => {
-  getUrlById(req.params.id)
-    .then((data) => {
-      if (data.status) {
-        Podcasts.findOne({ where: { id: req.params.id } })
-          .then((podcast) => {
-            if (podcast !== null && data.data) {
-              return res
-                .status(httpStatus.OK.code)
-                .send(
-                  new ResponseController(
-                    httpStatus.OK.code,
-                    httpStatus.OK.status,
-                    "Podcast received",
-                    _.defaults(podcast.get({ plain: true }), data.data.get({ plain: true }))
-                  )
-                );
-            }
-          })
-          .catch((err) => {
-            return res
-              .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-              .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Error", err));
-          });
-      }
-    })
-    .catch((err) => {
+export const getPodcast = async (req: Request, res: Response) => {
+  try {
+    const podcast = await Podcasts.findOne({ where: { id: req.params.id } });
+    if (!podcast) {
       return res
         .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, err));
-    });
+        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Podcasts not found"));
+    }
+    const mergedBlog = await mergeObjectWithUrl<Podcasts>(podcast, req.params.id);
+    return res
+      .status(httpStatus.OK.code)
+      .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Podcast received", mergedBlog));
+  } catch (err) {
+    return res
+      .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+      .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Error", err));
+  }
 };
 
 export const createPodcast = (req: Request, res: Response): void => {
