@@ -15,7 +15,6 @@
   "author": "Ibonom",
   "license": "ISC",
   "dependencies": {
-    "@types/multer": "^1.4.11",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -29,7 +28,8 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.35.0",
     "sequelize-typescript": "^2.1.5",
-    "sharp": "^0.32.6"
+    "sharp": "^0.32.6",
+    "xml": "^1.0.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -44,6 +44,8 @@
     "@types/supertest": "^6.0.2",
     "@types/validator": "^13.11.6",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@types/multer": "^1.4.11",
+    "@types/xml": "^1.0.11",
     "cross-env": "^7.0.3",
     "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",

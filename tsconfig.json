@@ -36,6 +36,9 @@
       ],
       "@middleware/*": [
         "src/middleware/*"
+      ],
+      "@helpers/*": [
+        "src/helpers/*"
       ]
     },
     "skipLibCheck": true,

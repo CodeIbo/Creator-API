@@ -26,6 +26,9 @@ All endpoints are publicly accessible, but operations such as modification, addi
 - `/episode` - Handling podcast episodes.
 - `/image` - Managing images.
 - `/url` - Handling routing in front-end application.
+- `/settings` - Manage global settings in front-end application.
+- `/ui-settings` - Manage global UI settings in front-end application.
+- `/sitemap.xml` - Generate sitemap for front-end application based on urls in db.
 
 ### Security
 
