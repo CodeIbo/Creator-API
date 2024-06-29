@@ -3,20 +3,8 @@ import express from "express";
 import cookieparser from "cookie-parser";
 import dotenv from "dotenv";
 import "@config/mysql.config";
-import userRoutes from "@routes/user.route";
-import pageRoutes from "@routes/page.route";
-import authRoutes from "@routes/auth.route";
-import blogRoutes from "@routes/blog.route";
-import articleRoute from "@routes/article.route";
-import podcastRoutes from "@routes/podcast.route";
-import episodeRoutes from "@routes/episode.route";
-import imageRoutes from "@routes/image.route";
-import menuRoutes from "@routes/menu.route";
-import urlRoutes from "@routes/url.route";
-import socialMediaRoutes from "@routes/socialMedia.route";
-import settingsRoutes from "@routes/settings.route";
-import uiSettingsRoutes from "@routes/uiSettings.route";
-import xmlRoutes from "@routes/xml.route";
+import apiRoutes from "@routes/api/index.route";
+import apiLimiter from "@config/rate-limit.config";
 
 const accessURLS = [process.env.PANEL_URL, process.env.FRONT_END_URL].filter(Boolean) as string[] | [];
 
@@ -26,37 +14,15 @@ app.use(cors({ credentials: true, origin: accessURLS }));
 app.use(express.json());
 app.use(cookieparser());
 
+if (process.env.NODE_ENV === "production") {
+  app.use(apiLimiter);
+}
+
 app.get("/", (req, res) => {
   res.send("Server Work");
 });
 
-app.use("/auth", authRoutes);
-
-app.use("/users", userRoutes);
-
-app.use("/pages", pageRoutes);
-
-app.use("/blog", blogRoutes);
-
-app.use("/article", articleRoute);
-
-app.use("/podcast", podcastRoutes);
-
-app.use("/episode", episodeRoutes);
-
-app.use("/image", imageRoutes);
-
-app.use("/menu", menuRoutes);
-
-app.use("/url", urlRoutes);
-
-app.use("/social-media", socialMediaRoutes);
-
-app.use("/settings", settingsRoutes);
-
-app.use("/ui-settings", uiSettingsRoutes);
-
-app.use("/sitemap.xml", xmlRoutes);
+app.use("/api", apiRoutes);
 
 app.listen(Number(process.env.SERVER_PORT) ?? 6666, () => {
   console.log(`App start at port ${process.env.SERVER_PORT ?? "6666"}`);

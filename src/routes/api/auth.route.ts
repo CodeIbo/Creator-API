@@ -1,6 +1,6 @@
 import express from "express";
 import { login, refreshJWTToken, logout } from "@controllers/auth_controller";
-import verifyJWT from "@src/middleware/verifyJWT";
+import verifyJWT from "@middleware/verifyJWT";
 
 const authRoutes = express.Router();
 

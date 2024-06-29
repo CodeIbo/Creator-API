@@ -7,11 +7,16 @@ import {
   getEpisodesByKey,
   updateEpisode,
 } from "@controllers/episode_controller";
+import verifyAPIKey from "@middleware/verifyAPIKey";
 
 const episodeRoutes = express.Router();
 
-episodeRoutes.route("/").get(getEpisodesByKey).post(verifyJWT, createEpisode);
+episodeRoutes.route("/").get(verifyAPIKey, getEpisodesByKey).post(verifyJWT, createEpisode);
 
-episodeRoutes.route("/:id").get(getEpisode).put(verifyJWT, updateEpisode).delete(verifyJWT, deleteEpisode);
+episodeRoutes
+  .route("/:id")
+  .get(verifyAPIKey, getEpisode)
+  .put(verifyJWT, updateEpisode)
+  .delete(verifyJWT, deleteEpisode);
 
 export default episodeRoutes;

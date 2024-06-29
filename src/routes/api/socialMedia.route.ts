@@ -6,13 +6,14 @@ import {
   sortSocialMedia,
   updateSocialMedia,
 } from "@controllers/socialMedia_controller";
+import verifyAPIKey from "@middleware/verifyAPIKey";
 
 const socialMediaRoutes = express.Router();
 
-socialMediaRoutes.route("/").get(getListSocialMedia);
+socialMediaRoutes.route("/").get(verifyAPIKey, getListSocialMedia);
 
 socialMediaRoutes.route("/sort").put(verifyJWT, sortSocialMedia);
 
-socialMediaRoutes.route("/:id").get(getSocialMediaById).put(verifyJWT, updateSocialMedia);
+socialMediaRoutes.route("/:id").get(verifyAPIKey, getSocialMediaById).put(verifyJWT, updateSocialMedia);
 
 export default socialMediaRoutes;
