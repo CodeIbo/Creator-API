@@ -1,6 +1,7 @@
-import Menu, { type MenuUpdateAttributes, type MenuCreationAttributes } from "@db/models/Menu.model";
-import { keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
+
+import Menu, { type MenuUpdateAttributes, type MenuCreationAttributes } from "@sequelize/models/Menu.model";
+import { keysFilter } from "@helpers/key.helper";
 
 const verifyMenuKeys = (unkownObject: Record<string, any>, isNew: boolean) => {
   const menuKeys = keysFilter(Menu, ["url_id", "menu_order", "label", "parent_id", "scroll_target"]);

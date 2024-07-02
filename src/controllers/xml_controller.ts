@@ -1,13 +1,14 @@
 import { type Response, type Request } from "express";
 import xml from "xml";
-import Urls from "@db/models/Urls.model";
-import Articles from "@db/models/Articles.model";
-import Podcasts from "@db/models/Podcasts.model";
-import Episodes from "@db/models/Episodes.model";
-import { mergeArraysWithUrls } from "@helpers/contentMerger.helper";
-import Blogs from "@db/models/Blogs.model";
+
 import ResponseController from "./response_controller";
+import Urls from "@sequelize/models/Urls.model";
+import Articles from "@sequelize/models/Articles.model";
+import Podcasts from "@sequelize/models/Podcasts.model";
+import Episodes from "@sequelize/models/Episodes.model";
+import Blogs from "@sequelize/models/Blogs.model";
 import httpStatus from "@db/http_status";
+import { mergeArraysWithUrls } from "@helpers/contentMerger.helper";
 
 export const getSiteMapXML = async (req: Request, res: Response) => {
   try {
@@ -23,7 +24,7 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
       const matchedArticle = articles.filter((article) => article.blog_key === blog.blog_key);
       return matchedArticle.map((article) => ({
         url: [
-          { loc: `${process.env.FRONT_END_URL as string}/blog/${blog.url}/${article.url}` },
+          { loc: `${process.env.FRONT_END_URL as string}/blog/${blog.url as string}/${article.url as string}` },
           { changefreq: "weekly" },
           { priority: "0.85" },
         ],
@@ -34,7 +35,11 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
       const matchedEpisodes = episodes.filter((episode) => episode.podcast_key === podcast.podcast_key);
       return matchedEpisodes.map((matchedEpisode) => ({
         url: [
-          { loc: `${process.env.FRONT_END_URL as string}/podcast/${podcast.url}/${matchedEpisode.url}` },
+          {
+            loc: `${process.env.FRONT_END_URL as string}/podcast/${podcast.url as string}/${
+              matchedEpisode.url as string
+            }`,
+          },
           { changefreq: "weekly" },
           { priority: "0.85" },
         ],
@@ -46,7 +51,7 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
         case "blog":
           return {
             url: [
-              { loc: `${process.env.FRONT_END_URL as string}/blog/${page.url}` },
+              { loc: `${process.env.FRONT_END_URL as string}/blog/${page.url as string}` },
               { changefreq: "weekly" },
               { priority: "1.0" },
             ],
@@ -55,7 +60,7 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
         case "podcast":
           return {
             url: [
-              { loc: `${process.env.FRONT_END_URL as string}/podcast/${page.url}` },
+              { loc: `${process.env.FRONT_END_URL as string}/podcast/${page.url as string}` },
               { changefreq: "weekly" },
               { priority: "1.0" },
             ],
@@ -64,7 +69,7 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
         default:
           return {
             url: [
-              { loc: `${process.env.FRONT_END_URL as string}/${page.url}` },
+              { loc: `${process.env.FRONT_END_URL as string}/${page.url as string}` },
               { changefreq: "weekly" },
               { priority: "1.0" },
             ],

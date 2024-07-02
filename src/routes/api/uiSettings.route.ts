@@ -1,12 +1,13 @@
+import express from "express";
+
 import {
   getUISettingForPanel,
   getUISettings,
   getUISettingsForPanel,
   updateUISettings,
 } from "@controllers/uiSettings_controller";
-import verifyAPIKey from "@src/middleware/verifyAPIKey";
-import verifyJWT from "@src/middleware/verifyJWT";
-import express from "express";
+import verifyAPIKey from "@middleware/verifyAPIKey";
+import verifyJWT from "@middleware/verifyJWT";
 
 const uiSettingsRoutes = express.Router();
 

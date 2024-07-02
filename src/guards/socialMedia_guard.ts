@@ -1,6 +1,7 @@
-import SocialMedia, { type SocialMediaUpdateAttributes } from "@db/models/SocialMedia.model";
-import { keyVerificator, keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
+
+import { keyVerificator, keysFilter } from "@helpers/key.helper";
+import SocialMedia, { type SocialMediaUpdateAttributes } from "@sequelize/models/SocialMedia.model";
 
 const socialMediaKeys = keysFilter(SocialMedia, ["id", "created_at", "updated_at"], false);
 

@@ -39,6 +39,9 @@
       ],
       "@helpers/*": [
         "src/helpers/*"
+      ],
+      "@sequelize/*": [
+        "src/db/sequelize/*"
       ]
     },
     "skipLibCheck": true,

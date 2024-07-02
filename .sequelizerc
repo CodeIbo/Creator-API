@@ -1,9 +1,17 @@
-const path = require('path');
+require('dotenv').config();
+const path = require("path");
 
-//remove 'src' if you on prod mode
+console.log(__dirname)
+
+const isProduction = process.env.NODE_ENV === 'production';
+const resolvedPath = isProduction
+  ? path.resolve(__dirname, './index.js')
+  : path.resolve(__dirname, './src/config/sequelizer-path.config.ts');
+const paths = require(resolvedPath).paths;
+
 module.exports = {
-  'config': path.resolve('src/db/config', 'config.js'),
-  'models-path': path.resolve('src/db', 'models'),
-  'seeders-path': path.resolve('src/db', 'seeders'),
-  'migrations-path': path.resolve('src/db', 'migrations')
+  'config': paths.config,
+  'models-path': paths.modelsPath,
+  'seeders-path': paths.seedersPath,
+  'migrations-path': paths.migrationsPath
 };

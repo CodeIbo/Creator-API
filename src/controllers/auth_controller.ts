@@ -1,12 +1,13 @@
-import { isLoginUserObject } from "@guards/user_guard";
 import { type Request, type Response } from "express";
-import httpStatus from "@db/http_status";
-import ResponseController from "./response_controller";
-import { comparePassword } from "./password_controller";
 import jwt from "jsonwebtoken";
 import _ from "lodash";
+
+import ResponseController from "./response_controller";
+import { comparePassword } from "./password_controller";
+import { isLoginUserObject } from "@guards/user_guard";
+import httpStatus from "@db/http_status";
 import type JwtPayload from "@models/jwt.model";
-import Users from "@db/models/Users.model";
+import Users from "@sequelize/models/Users.model";
 
 const login = async (req: Request, res: Response) => {
   const userLog: Record<string, any> = {
@@ -39,7 +40,7 @@ const login = async (req: Request, res: Response) => {
             new ResponseController(
               httpStatus.NOT_FOUND.code,
               httpStatus.NOT_FOUND.status,
-              `Can't find user ${userLog.email}`
+              `Can't find user ${userLog.email as string}`
             )
           );
       }

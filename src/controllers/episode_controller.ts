@@ -1,9 +1,10 @@
-import httpStatus from "@db/http_status";
 import _ from "lodash";
-import ResponseController from "./response_controller";
 import { type Response, type Request } from "express";
-import Episodes from "@db/models/Episodes.model";
-import { isNewEpisodeObject, isUpdateEpisodeObject } from "@src/guards/episode_guard";
+
+import httpStatus from "@db/http_status";
+import ResponseController from "./response_controller";
+import Episodes from "@sequelize/models/Episodes.model";
+import { isNewEpisodeObject, isUpdateEpisodeObject } from "@guards/episode_guard";
 
 export const getEpisodesByKey = async (req: Request, res: Response) => {
   const podcastKey = req.query.podcast_key;

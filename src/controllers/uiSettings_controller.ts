@@ -1,8 +1,9 @@
-import httpStatus from "@db/http_status";
-import UISettings from "@db/models/UISettings.model";
 import { type Request, type Response } from "express";
+
 import ResponseController from "./response_controller";
-import { isUISettingsMediaObject } from "@src/guards/uiSetting_guard";
+import httpStatus from "@db/http_status";
+import UISettings from "@db/sequelize/models/UISettings.model";
+import { isUISettingsMediaObject } from "@guards/uiSetting_guard";
 
 export const getUISettings = async (req: Request, res: Response) => {
   await UISettings.findAll().then((data) => {

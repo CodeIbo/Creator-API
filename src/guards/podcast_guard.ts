@@ -1,8 +1,12 @@
-import { keysFilter, keyVerificator } from "@src/helpers/key.helper";
 import _ from "lodash";
+
 import { isNewUrlObject, isUpdateUrlObject } from "./url_guard";
-import { type UrlsUpdateAttributes, type UrlsCreationAttributes } from "@db/models/Urls.model";
-import Podcasts, { type PodcastCreationAttributes, type PodcastUpdateAttributes } from "@db/models/Podcasts.model";
+import { keysFilter, keyVerificator } from "@helpers/key.helper";
+import { type UrlsUpdateAttributes, type UrlsCreationAttributes } from "@sequelize/models/Urls.model";
+import Podcasts, {
+  type PodcastCreationAttributes,
+  type PodcastUpdateAttributes,
+} from "@sequelize/models/Podcasts.model";
 
 const podcastKeys = keysFilter(Podcasts, ["id", "created_at"], false);
 

@@ -1,9 +1,10 @@
-import httpStatus from "@db/http_status";
-import Articles from "@db/models/Articles.model";
-import { isNewArticleObject, isUpdateArticleObject } from "@src/guards/article_guard";
 import _ from "lodash";
-import ResponseController from "./response_controller";
 import { type Response, type Request } from "express";
+
+import ResponseController from "./response_controller";
+import httpStatus from "@db/http_status";
+import Articles from "@sequelize//models/Articles.model";
+import { isNewArticleObject, isUpdateArticleObject } from "@guards/article_guard";
 
 export const getArticlesByKey = async (req: Request, res: Response) => {
   const blogKey = req.query.blog_key;

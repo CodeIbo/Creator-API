@@ -1,7 +1,11 @@
 import _ from "lodash";
-import { keysFilter, keyVerificator } from "@src/helpers/key.helper";
-import Episodes, { type EpisodeCreationAttributes, type EpisodeUpdatenAttributes } from "@db/models/Episodes.model";
-import { isValidDate } from "@src/helpers/date.helper";
+
+import { keysFilter, keyVerificator } from "@helpers/key.helper";
+import { isValidDate } from "@helpers/date.helper";
+import Episodes, {
+  type EpisodeCreationAttributes,
+  type EpisodeUpdatenAttributes,
+} from "@sequelize/models/Episodes.model";
 
 const episodeNewKeys = keysFilter(Episodes, ["id", "created_at"], false);
 const episodeUpdateKeys = keysFilter(Episodes, ["id", "created_at", "podcast_key"], false);

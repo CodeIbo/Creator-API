@@ -1,10 +1,11 @@
-import Menu, { type MenuSortAtributes } from "@db/models/Menu.model";
+import _ from "lodash";
+import { type Response, type Request } from "express";
+
 import { getUrlById, getUrls } from "./url_controller";
 import ResponseController from "./response_controller";
+import Menu, { type MenuSortAtributes } from "@sequelize/models/Menu.model";
 import httpStatus from "@db/http_status";
-import { isNewMenuObject, isUpdatedMenuObject } from "@src/guards/menu_guard";
-import { type Response, type Request } from "express";
-import _ from "lodash";
+import { isNewMenuObject, isUpdatedMenuObject } from "@guards/menu_guard";
 
 export const getMenuItem = (req: Request, res: Response): void => {
   const id = req.params.id;
@@ -151,7 +152,7 @@ export const updatedMenuItem = async (req: Request, res: Response) => {
   }
   Menu.update(updateMenuItem, { where: { id } })
     .then(async () => {
-      return await Menu.findByPk(id);
+      return Menu.findByPk(id);
     })
     .then((menuItem) => {
       return res
@@ -201,8 +202,8 @@ export const sortMenuItems = async (req: Request, res: Response) => {
   } else {
     try {
       await Promise.all(
-        menuItems.map(
-          async (menuItem) => await Menu.update({ menu_order: menuItem.menu_order }, { where: { id: menuItem.id } })
+        menuItems.map(async (menuItem) =>
+          Menu.update({ menu_order: menuItem.menu_order }, { where: { id: menuItem.id } })
         )
       );
       return res

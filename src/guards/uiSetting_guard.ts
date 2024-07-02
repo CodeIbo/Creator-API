@@ -1,6 +1,7 @@
-import UISettings, { type UISettingsAttributes } from "@db/models/UISettings.model";
-import { keyVerificator, keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
+
+import { keyVerificator, keysFilter } from "@helpers/key.helper";
+import UISettings, { type UISettingsAttributes } from "@sequelize/models/UISettings.model";
 
 const uiSettingsKeys = keysFilter(UISettings, ["id", "created_at", "updated_at"], false);
 

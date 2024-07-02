@@ -1,6 +1,7 @@
-import { getSiteMapXML } from "@controllers/xml_controller";
-import verifyAPIKey from "@src/middleware/verifyAPIKey";
 import express from "express";
+
+import { getSiteMapXML } from "@controllers/xml_controller";
+import verifyAPIKey from "@middleware/verifyAPIKey";
 
 const xmlRoutes = express.Router();
 
