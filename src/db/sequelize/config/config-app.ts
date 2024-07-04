@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import { type ModelCtor } from "sequelize-typescript";
+import { type Dialect } from "sequelize";
 import models from "../../../db/sequelize/models/index";
 // https://github.com/willjw3/sequelize-typescript-tutorial
 dotenv.config();
@@ -14,6 +15,7 @@ export const development = {
     acquire: 30000,
     idle: 10000,
   },
+  dialect: "mysql" as Dialect,
   models: models.map((model) => model as ModelCtor<any>) as ModelCtor[] | string[],
 };
 
@@ -28,6 +30,7 @@ export const test = {
     idle: 10000,
   },
   models: models.map((model) => model as ModelCtor<any>) as ModelCtor[] | string[],
+  dialect: "mysql" as Dialect,
   storage: ":memory:",
 };
 
@@ -41,6 +44,7 @@ export const production = {
     acquire: 30000,
     idle: 10000,
   },
+  dialect: "mysql" as Dialect,
   // zle
   models: models.map((model) => model as ModelCtor<any>) as ModelCtor[] | string[],
 };
