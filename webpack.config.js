@@ -4,25 +4,22 @@ const TerserPlugin = require("terser-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const glob = require('glob')
 
-function separatePaths(path) {
-  const filesArr = glob.sync(path);
+function separatePaths(pattern) {
+  const filesArr = glob.sync(pattern);
   return filesArr.reduce((acc, file) => {
-    const entryName = file.substring(
-      file.lastIndexOf('/') + 1,
-      file.lastIndexOf('.')
-    );
-    acc[entryName] = file;
+    const entryName = path.relative('./src', file).replace(/\.[^/.]+$/, '');
+    acc[entryName] = path.resolve(__dirname, file);
     return acc;
   }, {});
 }
 
 const migrationEntries = separatePaths("./src/db/sequelize/migrations/*")
 const seederEntries = separatePaths("./src/db/sequelize/seeders/*")
+const modelEntries = separatePaths("./src/db/sequelize/models/*")
 
 
 
@@ -32,17 +29,27 @@ module.exports = {
   mode: "production",
   entry: {
     index: "./src/index.ts",
+    config: "./src/db/sequelize/config/config.js",
     ...migrationEntries,
     ...seederEntries,
+    ...modelEntries,
   },
   output: {
     libraryTarget: 'commonjs',
+    path: path.resolve(__dirname, 'dist'),
     filename: chunkData => {
-      if (Object.keys(migrationEntries).includes(chunkData.chunk.name)) {
-        return `migrations/${chunkData.chunk.name}.js`;
+      const name = chunkData.chunk.name
+      if (Object.keys(migrationEntries).includes(name)) {
+        return `migrations/${path.basename(name)}.js`;
       }
-      if (Object.keys(seederEntries).includes(chunkData.chunk.name)) {
-        return `seeders/${chunkData.chunk.name}.js`;
+      if (Object.keys(seederEntries).includes(name)) {
+        return `seeders/${path.basename(name)}.js`;
+      }
+      if (Object.keys(modelEntries).includes(name)) {
+        return `models/${path.basename(name)}.js`;
+      }
+      if (name === 'config') {
+        return 'config/config.js';
       }
 
       return '[name].js';
@@ -56,19 +63,15 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': 'process.env',
+    }),
     new CleanWebpackPlugin(),
     new CopyWebpackPlugin({
       patterns: [
         { from: ".sequelizerc", to: "." },
         { from: "package.json", to: '.' },
       ],
-    }),
-    new Dotenv({
-      safe: true,
-      systemvars: true,
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify("production"),
     }),
   ],
   externals: [nodeExternals()],
@@ -87,6 +90,7 @@ module.exports = {
   },
   optimization: {
     minimize: true,
+    nodeEnv: false,
     minimizer: [
       new TerserPlugin({
         terserOptions: {
@@ -97,6 +101,33 @@ module.exports = {
         extractComments: false,
       }),
     ],
+    splitChunks: {
+      cacheGroups: {
+        // migrations: {
+        //   test: /[\\/]src[\\/]db[\\/]sequelize[\\/]migrations[\\/]/,
+        //   name: 'migrations/',
+        //   chunks: 'all',
+        //   enforce: true,
+        // },
+        // seeders: {
+        //   test: /[\\/]src[\\/]db[\\/]sequelize[\\/]seeders[\\/]/,
+        //   name: 'seeders/',
+        //   chunks: 'all',
+        //   enforce: true,
+        // },
+        // models: {
+        //   test: /[\\/]src[\\/]db[\\/]sequelize[\\/]models[\\/]/,
+        //   name: 'models/',
+        //   chunks: 'all',
+        //   enforce: true,
+        // },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    },
   },
-  devtool: "source-map", // or false to disable source maps
+  devtool: false, // or false to disable source maps
 };

@@ -10,8 +10,8 @@ const resolvedPath = isProduction
 const paths = require(resolvedPath).paths;
 
 module.exports = {
-  'config': paths.config,
-  'models-path': paths.modelsPath,
-  'seeders-path': paths.seedersPath,
-  'migrations-path': paths.migrationsPath
+  'config': path.resolve('src/db/sequelize/config', 'config.js'),
+  'models-path': path.resolve('src/db/sequelize', 'models'),
+  'seeders-path': path.resolve('src/db/sequelize', 'seeders'),
+  'migrations-path': path.resolve('src/db/sequelize', 'migrations')
 };

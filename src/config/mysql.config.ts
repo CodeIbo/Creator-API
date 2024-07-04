@@ -10,7 +10,7 @@ const sequalizeDB = new Sequelize(
   String(process.env.DB_NAME),
   String(process.env.DB_USER),
   String(process.env.DB_PASSWORD),
-  appState(development, production, test)
+  { ...appState(development, production, test) }
 );
 const checkConnection = async () => {
   try {
