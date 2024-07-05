@@ -19,7 +19,6 @@ function separatePaths(pattern) {
 
 const migrationEntries = separatePaths("./src/db/sequelize/migrations/*")
 const seederEntries = separatePaths("./src/db/sequelize/seeders/*")
-const modelEntries = separatePaths("./src/db/sequelize/models/*")
 
 
 
@@ -32,7 +31,6 @@ module.exports = {
     config: "./src/db/sequelize/config/config.js",
     ...migrationEntries,
     ...seederEntries,
-    ...modelEntries,
   },
   output: {
     libraryTarget: 'commonjs',
@@ -44,9 +42,6 @@ module.exports = {
       }
       if (Object.keys(seederEntries).includes(name)) {
         return `seeders/${path.basename(name)}.js`;
-      }
-      if (Object.keys(modelEntries).includes(name)) {
-        return `models/${path.basename(name)}.js`;
       }
       if (name === 'config') {
         return 'config/config.js';
@@ -103,24 +98,6 @@ module.exports = {
     ],
     splitChunks: {
       cacheGroups: {
-        // migrations: {
-        //   test: /[\\/]src[\\/]db[\\/]sequelize[\\/]migrations[\\/]/,
-        //   name: 'migrations/',
-        //   chunks: 'all',
-        //   enforce: true,
-        // },
-        // seeders: {
-        //   test: /[\\/]src[\\/]db[\\/]sequelize[\\/]seeders[\\/]/,
-        //   name: 'seeders/',
-        //   chunks: 'all',
-        //   enforce: true,
-        // },
-        // models: {
-        //   test: /[\\/]src[\\/]db[\\/]sequelize[\\/]models[\\/]/,
-        //   name: 'models/',
-        //   chunks: 'all',
-        //   enforce: true,
-        // },
         default: {
           minChunks: 2,
           priority: -20,
@@ -129,5 +106,5 @@ module.exports = {
       },
     },
   },
-  devtool: false, // or false to disable source maps
+  devtool: false,
 };
