@@ -1,8 +1,9 @@
-import httpStatus from "@db/http_status";
 import { type Response, type Request } from "express";
-import { isUpdateSettingsObject } from "@src/guards/settings_guard";
+
 import ResponseController from "./response_controller";
-import Settings from "@db/models/Settings.model";
+import httpStatus from "@db/http_status";
+import { isUpdateSettingsObject } from "@guards/settings_guard";
+import Settings from "@sequelize/models/Settings.model";
 
 export const getSettingsById = async (req: Request, res: Response) => {
   const id = req.params.id;

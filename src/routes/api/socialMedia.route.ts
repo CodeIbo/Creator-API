@@ -1,12 +1,13 @@
 import express from "express";
+
 import verifyJWT from "@middleware/verifyJWT";
+import verifyAPIKey from "@middleware/verifyAPIKey";
 import {
   getListSocialMedia,
   getSocialMediaById,
   sortSocialMedia,
   updateSocialMedia,
 } from "@controllers/socialMedia_controller";
-import verifyAPIKey from "@middleware/verifyAPIKey";
 
 const socialMediaRoutes = express.Router();
 

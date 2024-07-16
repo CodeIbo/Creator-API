@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { getUrlById, getUrlsByCategory } from "@controllers/url_controller";
-import type Urls from "@db/models/Urls.model";
-import { type pageCategory } from "@db/models/Urls.model";
+import type Urls from "@sequelize/models/Urls.model";
+import { type pageCategory } from "@sequelize/models/Urls.model";
 
 interface ContentObject {
   id: string;

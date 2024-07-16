@@ -1,6 +1,7 @@
-import Settings, { type SettingsUpdateAttributes } from "@db/models/Settings.model";
-import { keyVerificator, keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
+
+import Settings, { type SettingsUpdateAttributes } from "@sequelize/models/Settings.model";
+import { keyVerificator, keysFilter } from "@helpers/key.helper";
 
 const settingKeys = keysFilter(Settings, ["id", "created_at", "updated_at"], false);
 

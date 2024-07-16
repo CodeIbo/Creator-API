@@ -1,7 +1,10 @@
 import _ from "lodash";
-import { keysFilter, keyVerificator } from "@src/helpers/key.helper";
-import Articles, { type ArticlesCreationAttributes, type ArticlesUpdatenAttributes } from "@db/models/Articles.model";
-import { isValidDate } from "@src/helpers/date.helper";
+import { keysFilter, keyVerificator } from "@helpers/key.helper";
+import Articles, {
+  type ArticlesCreationAttributes,
+  type ArticlesUpdatenAttributes,
+} from "@sequelize/models/Articles.model";
+import { isValidDate } from "@helpers/date.helper";
 
 const articleNewKeys = keysFilter(Articles, ["id", "created_at"], false);
 const articleUpdateKeys = keysFilter(Articles, ["id", "created_at", "blog_key"], false);

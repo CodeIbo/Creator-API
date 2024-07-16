@@ -1,6 +1,7 @@
+import { type Response, type Request, type NextFunction } from "express";
+
 import ResponseController from "@controllers/response_controller";
 import httpStatus from "@db/http_status";
-import { type Response, type Request, type NextFunction } from "express";
 
 const verifyAPIKey = (req: Request, res: Response, next: NextFunction) => {
   const apiKeyHeader = req.headers["x-api-key"];

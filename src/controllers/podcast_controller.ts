@@ -3,13 +3,10 @@ import _ from "lodash";
 
 import ResponseController from "./response_controller";
 import { addNewUrl, deleteUrlObject, getUrlById, updateUrlObject } from "./url_controller";
-
 import httpStatus from "@db/http_status";
-import Podcasts from "@db/models/Podcasts.model";
-
+import Podcasts from "@sequelize/models/Podcasts.model";
 import { keysFilter } from "@helpers/key.helper";
 import { mergeArraysWithUrls, mergeObjectWithUrl } from "@helpers/contentMerger.helper";
-
 import { isNewPodcastObject, isUpdatePodcastObject } from "@guards/podcast_guard";
 
 export const getPodcasts = async (_req: Request, res: Response) => {

@@ -1,6 +1,7 @@
 import _ from "lodash";
-import Urls, { type UrlsUpdateAttributes, type UrlsCreationAttributes } from "@db/models/Urls.model";
-import { keyVerificator, keysFilter } from "@src/helpers/key.helper";
+
+import { keyVerificator, keysFilter } from "@helpers/key.helper";
+import Urls, { type UrlsUpdateAttributes, type UrlsCreationAttributes } from "@sequelize/models/Urls.model";
 
 const urlKeys = keysFilter(Urls, ["id", "created_at"], false);
 

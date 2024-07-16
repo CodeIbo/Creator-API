@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
 import { Sequelize } from "sequelize-typescript";
-import { development, test, production } from "@db/config/config-app";
-import { appState } from "@src/helpers/appState.helper";
+
+import { development, test, production } from "@sequelize/config/config-app";
+import { appState } from "@helpers/appState.helper";
 
 dotenv.config();
 
@@ -9,7 +10,7 @@ const sequalizeDB = new Sequelize(
   String(process.env.DB_NAME),
   String(process.env.DB_USER),
   String(process.env.DB_PASSWORD),
-  appState(development, production, test)
+  { ...appState(development, production, test) }
 );
 const checkConnection = async () => {
   try {

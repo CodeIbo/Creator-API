@@ -1,8 +1,9 @@
 import { type Response, type Request } from "express";
-import SocialMedia, { type SocialMediaSortAtributes } from "@db/models/SocialMedia.model";
-import httpStatus from "@db/http_status";
+
 import ResponseController from "./response_controller";
 import { isUpdateSocialMediaObject } from "@guards/socialMedia_guard";
+import httpStatus from "@db/http_status";
+import SocialMedia, { type SocialMediaSortAtributes } from "@sequelize/models/SocialMedia.model";
 
 export const getSocialMediaById = async (req: Request, res: Response) => {
   const id = req.params.id;
@@ -103,9 +104,7 @@ export const sortSocialMedia = async (req: Request, res: Response) => {
   } else {
     try {
       await Promise.all(
-        socialMediaItems.map(
-          async (item) => await SocialMedia.update({ order: item.order }, { where: { id: item.id } })
-        )
+        socialMediaItems.map(async (item) => SocialMedia.update({ order: item.order }, { where: { id: item.id } }))
       );
       return res
         .status(httpStatus.OK.code)

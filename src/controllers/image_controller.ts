@@ -1,10 +1,11 @@
-import httpStatus from "@db/http_status";
-import Images from "@db/models/Images.model";
-import ResponseController from "./response_controller";
-import { type Response, type Request } from "express";
-import path from "path";
-import fs from "fs";
 import sharp from "sharp";
+import fs from "fs";
+import path from "path";
+import { type Response, type Request } from "express";
+
+import ResponseController from "./response_controller";
+import httpStatus from "@db/http_status";
+import Images from "@sequelize/models/Images.model";
 
 export const uploadImage = async (req: Request, res: Response) => {
   const file = req?.file;

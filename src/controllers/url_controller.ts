@@ -1,12 +1,11 @@
-import httpStatus from "@db/http_status";
-import Urls, { type pageCategory } from "@db/models/Urls.model";
-import { isNewUrlObject, isUpdateUrlObject } from "@src/guards/url_guard";
-import { keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
-import ResponseController from "./response_controller";
 import { type Response, type Request } from "express";
 
-// helpers
+import ResponseController from "./response_controller";
+import httpStatus from "@db/http_status";
+import { keysFilter } from "@helpers/key.helper";
+import { isNewUrlObject, isUpdateUrlObject } from "@guards/url_guard";
+import Urls, { type pageCategory } from "@sequelize/models/Urls.model";
 
 export const getUrlsByCategory = async (category: pageCategory) => {
   const urls = await Urls.findAll({

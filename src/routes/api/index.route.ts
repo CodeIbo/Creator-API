@@ -1,4 +1,5 @@
 import express from "express";
+
 import articleRoute from "./article.route";
 import authRoutes from "./auth.route";
 import blogRoutes from "./blog.route";

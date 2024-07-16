@@ -1,8 +1,9 @@
-import Blogs, { type BlogUpdateAttributes, type BlogCreationAttributes } from "@db/models/Blogs.model";
-import { keysFilter } from "@src/helpers/key.helper";
 import _ from "lodash";
+
 import { isNewUrlObject, isUpdateUrlObject } from "./url_guard";
-import { type UrlsUpdateAttributes, type UrlsCreationAttributes } from "@db/models/Urls.model";
+import Blogs, { type BlogUpdateAttributes, type BlogCreationAttributes } from "@sequelize/models/Blogs.model";
+import { type UrlsUpdateAttributes, type UrlsCreationAttributes } from "@sequelize/models/Urls.model";
+import { keysFilter } from "@helpers/key.helper";
 
 const verifyBlogKeys = (unkownObject: Record<string, any>, isNew: boolean) => {
   const blogKeys = keysFilter(Blogs, ["blog_title", "blog_key"]);

@@ -1,9 +1,10 @@
+import _ from "lodash";
+
 import {
   type UserCreationAttributes,
   type userLoginAttributes,
   type userUpdateAttributes,
-} from "@db/models/Users.model";
-import _ from "lodash";
+} from "@sequelize/models/Users.model";
 
 const verifyUserKeys = (unkownObject: Record<string, any>) => {
   return _.keys(unkownObject).every(

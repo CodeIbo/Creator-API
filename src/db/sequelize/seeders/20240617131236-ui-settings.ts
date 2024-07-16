@@ -37,7 +37,7 @@ module.exports = {
           element_type: "privacy_policy",
         },
       ])
-      .catch((err) => {
+      .catch((err: any) => {
         console.log(err);
       });
   },

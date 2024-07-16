@@ -1,11 +1,12 @@
 import { type Response, type Request } from "express";
 import _ from "lodash";
-import httpStatus from "@db/http_status";
+
 import ResponseController from "./response_controller";
-import { isNewUserObject, isUpdateUserObject } from "@guards/user_guard";
 import { encryptPassword } from "./password_controller";
-import Users from "@db/models/Users.model";
-import { type userUpdateAttributes } from "@db/models/Users.model";
+import httpStatus from "@db/http_status";
+import Users from "@sequelize/models/Users.model";
+import { type userUpdateAttributes } from "@sequelize/models/Users.model";
+import { isNewUserObject, isUpdateUserObject } from "@guards/user_guard";
 
 export const getUsers = async (_req: Request, res: Response) => {
   await Users.findAll()

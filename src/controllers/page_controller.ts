@@ -1,10 +1,11 @@
-import httpStatus from "@db/http_status";
-import ResponseController from "./response_controller";
-import { type Response, type Request } from "express";
-import { isNewPageObject, isUpdatePageObject } from "@guards/page_guard";
-import Pages from "@db/models/Pages.model";
-import { addNewUrl, deleteUrlObject, getUrlById, getUrlsByCategory, updateUrlObject } from "./url_controller";
 import _ from "lodash";
+import { type Response, type Request } from "express";
+
+import ResponseController from "./response_controller";
+import { addNewUrl, deleteUrlObject, getUrlById, getUrlsByCategory, updateUrlObject } from "./url_controller";
+import httpStatus from "@db/http_status";
+import { isNewPageObject, isUpdatePageObject } from "@guards/page_guard";
+import Pages from "@sequelize/models/Pages.model";
 
 export const getPages = (_req: Request, res: Response): void => {
   getUrlsByCategory("page")

@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { type Response, type Request, type NextFunction } from "express";
+
 import httpStatus from "@db/http_status";
 import ResponseController from "@controllers/response_controller";
 

@@ -1,7 +1,8 @@
 import _ from "lodash";
+
 import { isNewUrlObject, isUpdateUrlObject } from "./url_guard";
-import { type UrlsCreationAttributes } from "@db/models/Urls.model";
-import { type PageUpdateAttributes, type PageCreationAttributes } from "@db/models/Pages.model";
+import { type PageUpdateAttributes, type PageCreationAttributes } from "@sequelize/models/Pages.model";
+import { type UrlsCreationAttributes } from "@sequelize/models/Urls.model";
 
 const verifyPageKeys = (unkownObject: Record<string, any>) => {
   return _.keys(unkownObject).includes("page_content");

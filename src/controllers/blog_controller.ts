@@ -3,9 +3,8 @@ import _ from "lodash";
 
 import ResponseController from "./response_controller";
 import { addNewUrl, deleteUrlObject, getUrlById, updateUrlObject } from "./url_controller";
-
 import httpStatus from "@db/http_status";
-import Blogs from "@db/models/Blogs.model";
+import Blogs from "@sequelize/models/Blogs.model";
 
 import { keysFilter } from "@helpers/key.helper";
 import { mergeArraysWithUrls, mergeObjectWithUrl } from "@helpers/contentMerger.helper";

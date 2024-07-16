@@ -39,6 +39,9 @@
       ],
       "@helpers/*": [
         "src/helpers/*"
+      ],
+      "@sequelize/*": [
+        "src/db/sequelize/*"
       ]
     },
     "skipLibCheck": true,
@@ -52,6 +55,7 @@
     "node_modules",
     ".env",
     "src/db/init.sql",
-    "api.postman_collection.json"
+    "api.postman_collection.json",
+    "src/scripts"
   ]
 }
