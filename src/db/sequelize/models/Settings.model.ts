@@ -10,6 +10,7 @@ export interface SettingsAttributes extends timeStamp {
   meta_data_description_global: string;
   keywords_global: string;
   meta_data_suffix_global: string;
+  meta_author_global: string;
 }
 
 export type SettingsUpdateAttributes = Partial<SettingsAttributes>;
@@ -62,6 +63,11 @@ export default class Settings extends Model<SettingsAttributes, SettingsUpdateAt
     type: DataType.STRING,
   })
   declare meta_data_suffix_global: string;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  declare meta_author_global: string;
 
   @CreatedAt
   @Column({

@@ -29,6 +29,25 @@ export const getSettingsById = async (req: Request, res: Response) => {
     });
 };
 
+export const getDefaultSetting = async (req: Request, res: Response) => {
+  await Settings.findOne()
+    .then((data) => {
+      if (data) {
+        return res
+          .status(httpStatus.OK.code)
+          .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Default Setting", data));
+      }
+      return res
+        .status(httpStatus.OK.code)
+        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Default Setting not founded use ID"));
+    })
+    .catch((err) => {
+      return res
+        .status(httpStatus.OK.code)
+        .send(new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Error", err));
+    });
+};
+
 export const getSettings = async (req: Request, res: Response) => {
   await Settings.findAll()
     .then((data) => {
