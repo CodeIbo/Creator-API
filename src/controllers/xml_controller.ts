@@ -24,7 +24,7 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
       const matchedArticle = articles.filter((article) => article.blog_key === blog.blog_key);
       return matchedArticle.map((article) => ({
         url: [
-          { loc: `${process.env.FRONT_END_URL as string}/blog/${blog.url as string}/${article.url as string}` },
+          { loc: `${process.env.FRONT_END_URL as string}/blog/${blog.url}/${article.url}` },
           { changefreq: "weekly" },
           { priority: "0.85" },
         ],
@@ -36,9 +36,7 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
       return matchedEpisodes.map((matchedEpisode) => ({
         url: [
           {
-            loc: `${process.env.FRONT_END_URL as string}/podcast/${podcast.url as string}/${
-              matchedEpisode.url as string
-            }`,
+            loc: `${process.env.FRONT_END_URL as string}/podcast/${podcast.url}/${matchedEpisode.url}`,
           },
           { changefreq: "weekly" },
           { priority: "0.85" },
@@ -51,7 +49,7 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
         case "blog":
           return {
             url: [
-              { loc: `${process.env.FRONT_END_URL as string}/blog/${page.url as string}` },
+              { loc: `${process.env.FRONT_END_URL as string}/blog/${page.url}` },
               { changefreq: "weekly" },
               { priority: "1.0" },
             ],
@@ -60,7 +58,7 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
         case "podcast":
           return {
             url: [
-              { loc: `${process.env.FRONT_END_URL as string}/podcast/${page.url as string}` },
+              { loc: `${process.env.FRONT_END_URL as string}/podcast/${page.url}` },
               { changefreq: "weekly" },
               { priority: "1.0" },
             ],
@@ -69,7 +67,7 @@ export const getSiteMapXML = async (req: Request, res: Response) => {
         default:
           return {
             url: [
-              { loc: `${process.env.FRONT_END_URL as string}/${page.url as string}` },
+              { loc: `${process.env.FRONT_END_URL as string}/${page.url}` },
               { changefreq: "weekly" },
               { priority: "1.0" },
             ],
