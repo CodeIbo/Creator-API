@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, CreatedAt } from "sequelize-typescript";
 
-interface MenuAttributes {
+export interface MenuAttributes {
   id: string;
   url_id: string;
   menu_order: number;

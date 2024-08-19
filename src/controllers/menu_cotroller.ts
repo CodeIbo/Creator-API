@@ -3,9 +3,10 @@ import { type Response, type Request } from "express";
 
 import { getUrlById, getUrls } from "./url_controller";
 import ResponseController from "./response_controller";
-import Menu, { type MenuSortAtributes } from "@sequelize/models/Menu.model";
+import Menu from "@sequelize/models/Menu.model";
 import httpStatus from "@db/http_status";
 import { isNewMenuObject, isUpdatedMenuObject } from "@guards/menu_guard";
+import { flattenMenu, type MenuWithChildren, structureMenu } from "@src/helpers/menu.helper";
 
 export const getMenuItem = (req: Request, res: Response): void => {
   const id = req.params.id;
@@ -80,10 +81,11 @@ export const getMenuItems = (req: Request, res: Response): void => {
               });
               return updatedMenuItem;
             });
+            const menuWithChildren = structureMenu(updatedMenuItems);
             return res
               .status(httpStatus.OK.code)
               .send(
-                new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Menu Items", updatedMenuItems)
+                new ResponseController(httpStatus.OK.code, httpStatus.OK.status, "Found Menu Items", menuWithChildren)
               );
           })
           .catch((err) => {
@@ -152,7 +154,7 @@ export const updatedMenuItem = async (req: Request, res: Response) => {
   }
   Menu.update(updateMenuItem, { where: { id } })
     .then(async () => {
-      return Menu.findByPk(id);
+      return await Menu.findByPk(id);
     })
     .then((menuItem) => {
       return res
@@ -188,7 +190,7 @@ export const deleteMenuItem = async (req: Request, res: Response) => {
 };
 
 export const sortMenuItems = async (req: Request, res: Response) => {
-  const menuItems: MenuSortAtributes[] | undefined = req.body.menuItems;
+  const menuItems: MenuWithChildren[] | undefined = req.body.menuItems;
   if (!menuItems) {
     return res
       .status(httpStatus.INTERNAL_SERVER_ERROR.code)
@@ -201,9 +203,14 @@ export const sortMenuItems = async (req: Request, res: Response) => {
       );
   } else {
     try {
+      const flattedMenu = flattenMenu(menuItems);
       await Promise.all(
-        menuItems.map(async (menuItem) =>
-          Menu.update({ menu_order: menuItem.menu_order }, { where: { id: menuItem.id } })
+        flattedMenu.map(
+          async (menuItem) =>
+            await Menu.update(
+              { menu_order: menuItem.menu_order, parent_id: menuItem.parent_id },
+              { where: { id: menuItem.id } }
+            )
         )
       );
       return res
