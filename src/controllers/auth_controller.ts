@@ -40,7 +40,7 @@ const login = async (req: Request, res: Response) => {
             new ResponseController(
               httpStatus.NOT_FOUND.code,
               httpStatus.NOT_FOUND.status,
-              `Can't find user ${userLog.email as string}`
+              `Can't find user ${userLog.email}`
             )
           );
       }
