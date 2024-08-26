@@ -6,7 +6,7 @@ import ResponseController from "./response_controller";
 import Menu from "@sequelize/models/Menu.model";
 import httpStatus from "@db/http_status";
 import { isNewMenuObject, isUpdatedMenuObject } from "@guards/menu_guard";
-import { flattenMenu, type MenuWithChildren, structureMenu } from "@src/helpers/menu.helper";
+import { flattenMenu, structureMenu, type MenuWithChildren } from "@src/helpers/menu.helper";
 
 export const getMenuItem = (req: Request, res: Response): void => {
   const id = req.params.id;
@@ -14,35 +14,48 @@ export const getMenuItem = (req: Request, res: Response): void => {
   Menu.findOne({ where: { id } })
     .then((menu) => {
       if (menu !== null) {
-        getUrlById(menu.url_id)
-          .then((data) => {
-            const urlObject = data.data?.get();
-            if (data.status && urlObject) {
-              return res.status(httpStatus.OK.code).send(
-                new ResponseController(
-                  httpStatus.OK.code,
-                  httpStatus.OK.status,
-                  "Menu Item Received",
-                  _.defaults(menu.get({ plain: true }), {
-                    url: urlObject.url,
-                    page_category: urlObject.page_category,
-                  })
+        if (menu.url_id) {
+          getUrlById(menu.url_id)
+            .then((data) => {
+              const urlObject = data.data?.get();
+              if (data.status && urlObject) {
+                return res.status(httpStatus.OK.code).send(
+                  new ResponseController(
+                    httpStatus.OK.code,
+                    httpStatus.OK.status,
+                    "Menu Item Received",
+                    _.defaults(menu.get({ plain: true }), {
+                      url: urlObject.url,
+                      page_category: urlObject.page_category,
+                    })
+                  )
+                );
+              }
+            })
+            .catch((err) =>
+              res
+                .status(httpStatus.INTERNAL_SERVER_ERROR.code)
+                .send(
+                  new ResponseController(
+                    httpStatus.INTERNAL_SERVER_ERROR.code,
+                    httpStatus.INTERNAL_SERVER_ERROR.status,
+                    "Internal error",
+                    err
+                  )
                 )
-              );
-            }
-          })
-          .catch((err) =>
-            res
-              .status(httpStatus.INTERNAL_SERVER_ERROR.code)
-              .send(
-                new ResponseController(
-                  httpStatus.INTERNAL_SERVER_ERROR.code,
-                  httpStatus.INTERNAL_SERVER_ERROR.status,
-                  "Internal error",
-                  err
-                )
+            );
+        } else {
+          return res
+            .status(httpStatus.OK.code)
+            .send(
+              new ResponseController(
+                httpStatus.OK.code,
+                httpStatus.OK.status,
+                "Menu Item Received",
+                menu.get({ plain: true })
               )
-          );
+            );
+        }
       } else {
         return res
           .status(httpStatus.INTERNAL_SERVER_ERROR.code)

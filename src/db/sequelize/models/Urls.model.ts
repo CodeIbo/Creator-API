@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, CreatedAt, HasOne } from "sequelize-typescript";
+import { Table, Column, Model, DataType, CreatedAt, HasOne, HasMany } from "sequelize-typescript";
 import Pages from "./Pages.model";
 import Podcasts from "./Podcasts.model";
 import Blogs from "./Blogs.model";
@@ -79,7 +79,7 @@ class Urls extends Model<UrlsAttributes, UrlsCreationAttributes> {
   @HasOne(() => Podcasts, { foreignKey: { name: "id" }, onDelete: "CASCADE" })
   declare podcastKey: Podcasts;
 
-  @HasOne(() => Menu, { foreignKey: { name: "url_id" }, onDelete: "CASCADE" })
+  @HasMany(() => Menu, { foreignKey: { name: "url_id" }, onDelete: "CASCADE" })
   declare MenuKey: Menu;
 }
 

@@ -156,11 +156,16 @@ CREATE TABLE IF NOT EXISTS coredb.images (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS coredb.menu (
   id CHAR(36) NOT NULL DEFAULT (UUID()),
-  url_id VARCHAR(36) NOT NULL,
+  url_id VARCHAR(36) DEFAULT NULL,
   menu_order VARCHAR(255) NOT NULL,
   label VARCHAR(255) NOT NULL,
-  parent_id VARCHAR(255),
+  parent_id VARCHAR(255) DEFAULT NULL,
+  `type` ENUM('parent', 'internal', 'external', 'url') NOT NULL, 
+  external_url VARCHAR(255) DEFAULT NULL,
+  internal_url VARCHAR(255) DEFAULT NULL,
+  target_blank TINYINT(1) NOT NULL DEFAULT 0,
   created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,
     CONSTRAINT menu_url
@@ -187,6 +192,9 @@ CREATE TABLE IF NOT EXISTS coredb.social_media (
   UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE,
   UNIQUE INDEX icon_UNIQUE (icon ASC) VISIBLE);
 
+-------------------------------------------------------
+-- Table settings
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS coredb.settings (
   id CHAR(36) NOT NULL DEFAULT (UUID()),
   company_name VARCHAR(255) DEFAULT null,
@@ -201,7 +209,9 @@ CREATE TABLE IF NOT EXISTS coredb.settings (
   PRIMARY KEY (id),
   UNIQUE INDEX id_UNIQUE (id ASC) VISIBLE);
 
-
+-------------------------------------------------------
+-- Table ui_settings
+-- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS coredb.ui_settings (
   id CHAR(36) NOT NULL DEFAULT (UUID()),
   element_key VARCHAR(255) NOT NULL,

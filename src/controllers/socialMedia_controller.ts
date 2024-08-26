@@ -104,7 +104,9 @@ export const sortSocialMedia = async (req: Request, res: Response) => {
   } else {
     try {
       await Promise.all(
-        socialMediaItems.map(async (item) => SocialMedia.update({ order: item.order }, { where: { id: item.id } }))
+        socialMediaItems.map(
+          async (item) => await SocialMedia.update({ order: item.order }, { where: { id: item.id } })
+        )
       );
       return res
         .status(httpStatus.OK.code)
